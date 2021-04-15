@@ -5,11 +5,28 @@
 		$_POST['psw_repeat'] = strval(hash("sha256", strval($_POST['psw_repeat'])));
 		
 		include('../BDD/reqUtilisateur.php');
-		
-		insertUser(strval($_POST['Nom']), strval($_POST['Prenom']), strval($_POST['Mail']), strval($_POST['psw']), strval($_POST['psw_repeat']), strval($_POST['role']));
+		if(isset($_POST['role']) && $_POST['role'] == 'Utilisateur'){
+			insertUser(strval($_POST['Nom']), strval($_POST['Prenom']), strval($_POST['Mail']), strval($_POST['psw']), strval($_POST['psw_repeat']), strval($_POST['role']));
+			header('Location: ../php/Login.php');
+		}
+		else if(isset($_POST['role']) && $_POST['role'] == 'Joueur'){
+			if(isset($_POST['estCapitane']) && $_POST['estCapitane'] == 'oui') {
+				insertUser(strval($_POST['Nom']), strval($_POST['Prenom']), strval($_POST['Mail']), strval($_POST['psw']), strval($_POST['psw_repeat']), strval($_POST['role']));
+				insertJouer(true);
+				header('Location: ../php/Login.php');
+			}
+			else { 
+				insertUser(strval($_POST['Nom']), strval($_POST['Prenom']), strval($_POST['Mail']), strval($_POST['psw']), strval($_POST['psw_repeat']), strval($_POST['role']));
+				insertJouer(false);
+				header('Location: ../php/Login.php');
+			}
+		}
+		else 
+			trigger_error("Qqch va mal sur Register.php");
 	}
-	
-	$_POST = array();
+	else 
+		trigger_error("Qqch va mal sur Register.php");
+	unset($_POST);
 ?>
 
 <!DOCTYPE html>
@@ -50,13 +67,24 @@
 			
 			<b>Sélectionnez votre rôle dans le tournoi</b>
 			
-			</br>
+			</br>estCapitane
 			
 			<div class ="container_role">
-				<label for="Joueur">Joueur</label>
+				
+				
+				<label for="Utilisateur">Utilisateur</label>
 				<input type="radio" name="role" id="Utilisateur" value="Utilisateur">
 				
 				<br>
+				
+				<label for="Joueur">Joueur</label>
+				<input type="radio" name="role" id="Joueur" value="Joueur">
+				<br>
+
+			
+				<input type="checkbox" id="estCapitane" name="estCapitane" value="oui">
+				<label for="estCapitane"> Je suis Capitanne</label><br>
+				
 			</div>
 			
 			<hr>
