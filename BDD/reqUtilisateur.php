@@ -30,23 +30,29 @@
 		{
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
+		$sql_e = "SELECT * FROM Utilisateur WHERE email='$email'";
+		$res_e = mysqli_query($connexion, $sql_e);
+		if (mysqli_num_rows($res_e) > 0) {
+			trigger_error("Désolé ... e-mail déjà pris ");
+		}
+		else{
+			$idU = lineCount("Utilisateur");
+			if(strcmp($mdp, $confirmation) != 0)
+				trigger_error("Le mot de passe et la confirmation ne correspondent pas.");
 		
-		$idU = lineCount("Utilisateur") + 1;
-		if(strcmp($mdp, $confirmation) != 0)
-			trigger_error("Le mot de passe et la confirmation ne correspondent pas.");
+			if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+				trigger_error("$email n'est pas une adresse mail.");
 		
-		if(!filter_var($email, FILTER_VALIDATE_EMAIL))
-			trigger_error("$email n'est pas une adresse mail.");
+			if((strcmp($role, "Utilisateur") != 0) && strcmp($role, "Joueur") != 0)
+				trigger_error("Le rôle de l'utilisateur est invalide.");
+			$requete = "INSERT INTO Utilisateur VALUES($idU, '$nom', '$prenom', '$email', '$mdp', 'Utilisateur');";
 		
-		if((strcmp($role, "Utilisateur") != 0) && strcmp($role, "Joueur") != 0)
-			trigger_error("Le rôle de l'utilisateur est invalide.");
-		$requete = "INSERT INTO Utilisateur VALUES($idU, '$nom', '$prenom', '$email', '$mdp', 'Utilisateur');";
-		
-		$res = $connexion->query($requete);
-		if(!$res)
-			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$res = $connexion->query($requete);
+			if(!$res)
+				die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
 
-		$connexion->close();	
+			$connexion->close();
+		}	
 	}
 
 	function insertJouer(bool $b){
@@ -56,7 +62,7 @@
 		{
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
-		$idU = lineCount("Utilisateur");
+		$idU = lineCount("Utilisateur") - 1;
 		$requete_InsJ = "INSERT INTO Joueur (idJoueur,idEquipe,estCapitaine) VALUES ($idU,0 ,$b) ";
 		$resJ = $connexion->query($requete_InsJ);
 		if(!$resJ)
