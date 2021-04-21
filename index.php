@@ -11,6 +11,7 @@
             <a href="Tournois.php">Liste des Tournois</a>
             <a href="php/Preinscription.php">Preinscription</a>
             <a href="php/AffectGest.php">affecter les gestionnaire</a>
+            <a href="php/creer_tournois.php">Creer un tournoi</a>
             <div class="topnav-right">
               <a href="php/Login.php">Login</a>
             </div>
