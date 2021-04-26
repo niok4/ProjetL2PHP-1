@@ -1,28 +1,8 @@
 <?php
-	function lineCount(string $table)
-	{
-		include('DataBaseLogin.inc.php');
-		
-		$connexion = new mysqli($server, $user, $passwd, $db);
+	include_once('reqGeneralBDD.php');
+	include_once('../module/Utilisateur.php');
 	
-		if($connexion->connect_error)
-		{
-			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
-		}
-		
-		$res = $connexion->query("SELECT * FROM $table;");
-		
-		if(!$res)
-			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
-		
-		$row = $res->fetch_assoc();
-		
-		$connexion->close();
-		
-		return $res->num_rows;
-	}
-	
-	function insertUser(string $nom, string $prenom, string $email, string $mdp, string $confirmation, string $role)
+	function insertUtilisateur(string $nom, string $prenom, string $email, string $mdp, string $confirmation, string $role)
 	{
 		include('DataBaseLogin.inc.php');
 		
@@ -53,6 +33,13 @@
 		$connexion->close();
 		
 		unset($_POST);
+		
+		return true;
+	}
+	
+	function insertUser(string $nom, string $prenom, string $email, string $mdp, string $confirmation, string $role)
+	{
+		insertUtilisateur($nom, $prenom, $email, $mdp, $confirmation, $role);
 		
 		header('Location: ../php/Login.php');
 		exit();
@@ -125,5 +112,83 @@
 			return false;
 		
 		return true;
+	}
+	
+	function getUtilisateur(string $id)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT * FROM Utilisateur WHERE idUtilisateur = \"$id\";";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		
+		//$res->data_seek(0);
+		$objTemp = $res->fetch_object();
+		$idUtilisateur = strval($objTemp->idUtilisateur);
+		$nom = strval($objTemp->nom);
+		$prenom = strval($objTemp->prenom);
+		$email = strval($objTemp->email);
+		$motDePasse = strval($objTemp->motDePasse);
+		$role = strval($objTemp->role);
+		
+		$connexion->close();
+		
+		if(empty($idUtilisateur))
+			return NULL;
+		
+		return new Utilisateur($idUtilisateur, $nom, $prenom, $email, $motDePasse, $role);
+	}
+	
+	function getUtilisateurWithEmail(string $login)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT * FROM Utilisateur WHERE email = \"$login\";";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		
+		//$res->data_seek(0);
+		$objTemp = $res->fetch_object();
+		$idUtilisateur = strval($objTemp->idUtilisateur);
+		$nom = strval($objTemp->nom);
+		$prenom = strval($objTemp->prenom);
+		$email = strval($objTemp->email);
+		$motDePasse = strval($objTemp->motDePasse);
+		$role = strval($objTemp->role);
+		
+		$connexion->close();
+		
+		if(empty($idUtilisateur))
+			return NULL;
+		
+		return new Utilisateur($idUtilisateur, $nom, $prenom, $email, $motDePasse, $role);
 	}
 ?>
