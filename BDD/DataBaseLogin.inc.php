@@ -4,7 +4,7 @@
 	global $user;
 	$user="root";
 	global $passwd;
-	$passwd="Spacewalkerzx48!";
+	$passwd="root";
 	global $db;
 	$db="projet";
 ?>
