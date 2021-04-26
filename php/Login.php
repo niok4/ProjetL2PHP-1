@@ -26,35 +26,50 @@
 <html lang="fr">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="../css/styleRegLog.css" />
+		<link rel="stylesheet" type="text/css" href="../css/styleLogin.css" />
 		<script type="text/javascript" src="../js/LoginJS.js"></script>
 		<title>Authentification</title>
 	</head>
 	
 	<body>
-		<form action="Login.php" method="POST" onreset="return vider();" class="container">
-			<h1>
-				<p style="text-align: center;">Authentification</p>
-			</h1>
-			
-			<p style="text-align: center;">Entrez vos information pour acceder à votre compte</p>
-			
-			<hr>
-
-			<label for="mail"><b>Mail</b></label>
-			<input type="email" placeholder="Entrez votre mail" name="mail" id="mail" required>
-
-			<label for="psw"><b>Mot de passe</b></label>
-			<input type="password" placeholder="Entrez votre mot de passe" name="psw" id="psw" required>
-
-			<hr>
-			
-			<button type="submit" class="loginbtn" name="envoiValeurs" value="Envoyer">S'authentifier</button>
-			<button type="reset" name="effacerValeurs" value="Effacer">gg</button>
-		</form>
-		
-		<div class="container">
-			<p>Pas encore de compte ? <a href="Register.php">Créer un compte</a>.</p>
+		<div>
+			<a href="../index.php">
+			<img src="../img/home.png">
+			</a>
 		</div>
+		<style>
+			body div img {
+				width:50px;
+				border:5px groove white;
+				padding:5px;
+	
+			}
+		</style>
+		
+		<div class="cadre">
+
+			<form action="Login.php" method="POST" onreset="return vider();" class="container">
+				<h1>
+					<p style="text-align: center;">Authentification</p>
+				</h1>
+				
+				
+				<hr>
+
+				<label for="mail"><b>Mail</b></label>
+				<input type="email" placeholder="Entrez votre mail" name="mail" id="mail" required>
+
+				<label for="psw"><b>Mot de passe</b></label>
+				<input type="password" placeholder="Entrez votre mot de passe" name="psw" id="psw" required>
+
+				<hr style="margin-top:5%">
+				
+				<button type="submit" class="loginbtn" name="envoiValeurs" value="Envoyer">Authentification</button>
+			</form>
+			
+			<div class="container">
+				<p style="font-size:20px">Pas encore de compte ? <a href="Register.php">Créer un compte</a>.</p>
+			</div>
+	</div>
 	</body>
 </html>
