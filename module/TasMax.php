@@ -206,17 +206,13 @@
 
 
 			echo '<div id="container">';
-			echo "XXXXXXXXXXXXX";
-			echo sizeof($this->m_tabMatchs) ;
-			echo sizeof($this->m_tas) ;
-			echo "XXXXXXXXXXXXX";
 
 			for($i=1;$i<=($this->nbTours());$i++){
 				echo'<section id=s'.$i.'>';
 				
 
 				for($j=$deb;$j>$deb-pow(2,$pui);--$j){
-					//echo $j;
+		
 					if($this->m_tas[$j]!= null){
 						$nom = $this->m_tas[$j]->getNomEquipe();
 
