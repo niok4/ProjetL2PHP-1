@@ -1,0 +1,125 @@
+* {box-sizing: border-box}
+
+.container {
+  padding: 16px;
+  color:white;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+
+.container a:hover{color:red;}
+a {color:yellow;}
+
+body {
+  background-image:url(../img/back.jpg);
+  background-size:cover;
+  background-attachment:fixed;
+}
+
+.cadre {
+  margin:auto;
+  height:480px;
+  width:500px;
+  margin-top:5%;
+}
+
+h1 p {
+  text-align:center;
+  color:white;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-size:50px;
+}
+
+.container_role{
+  padding: 16px;
+  background-color:#0d0d0d;
+  border-radius:5px;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=email] {
+  width: 100%;
+  padding: 15px;
+  margin: 15px 0 15px 0;
+  display: inline-block;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  border: none;
+  background:white;
+  border-radius:5px;
+  font-size:20px;
+  color:black;
+}
+
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
+  background-color: #ffffb3;
+  outline: none;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+.loginbtn, .registerbtn {
+  background-color: #0d0d0d;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+  border-radius:5px;
+}
+
+.registerbtn:hover {
+  opacity:0.9;
+  color:red;
+}
+
+.loginbtn:hover {
+  opacity:1;
+  color:red;
+}
+
+.signin {
+  background-color: #f1f1f1;
+  text-align: center;
+}
+
+form {
+  margin:auto;
+  width:550px;
+  }
+
+.container-signin {
+  margin:auto;
+  width:500px;
+  color:white;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+.container-signin a:hover {
+  color:red;
+}
+
+.container-logout {
+  margin:auto;
+  width:500px;
+  color:white;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+.container-logout a:hover {
+  color:red;
+}
+.erreur {
+	background-color: #ff9900;
+	color: #ff0000;
+}
+
+.erreur h1 {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+#OptJoueur {
+	display: none;
+}
