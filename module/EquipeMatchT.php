@@ -30,5 +30,9 @@ class EquipeMatchT extends MatchT {
 		$this->m_score = rand(0,10);
 	}
 
+	public function setScoreVal($score){ 
+		$this->m_score = $score ;
+	}
+
 }
 ?>

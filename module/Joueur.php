@@ -1,17 +1,18 @@
 <?php
-	include('Utilisateur.php');
+	include_once ('Utilisateur.php');
 	
 	class Joueur extends Utilisateur
 	{
 		private $m_idJoueur;
 		private $m_estCapitaine;
+		private $m_idEquipe = 1 ;
 		
 		public function __construct(int $idU, string $nom, string $prenom, string $email, string $motDePasse, string $role, int $idJ, bool $estCapitaine)
 		{
 			parent::__construct($idU, $nom, $prenom, $email, $motDePasse, $role);
 			
 			$this->m_idJoueur = $idJ;
-			$this->m_estCapitaine = $estCapitaine;
+			$this->m_estCapitaine = ((bool)$estCapitaine);
 		}
 		
 		public function getIdJoueur()
@@ -22,6 +23,10 @@
 		public function getCapitaine()
 		{
 			return $this->m_estCapitaine;
+		}
+
+		public function getIdEquipe(){
+			return $this->m_idEquipe;
 		}
 	}
 ?>

@@ -1,5 +1,5 @@
 <?php
-	include('Joueur.php');
+	include_once ('Joueur.php');
 	
 	class Equipe
 	{
@@ -21,7 +21,11 @@
 			$this->m_niveau = $niveau;
 			$this->m_adresse = $adresse;
 			$this->m_numTel = $numTel;
-			$this->m_tabJoueurs = $tabJoueurs;
+			
+			$this->m_tabJoueurs = array();
+			
+			for($i=0;$i<count($tabJoueurs);++$i)
+				array_push($this->m_tabJoueurs, $tabJoueurs[$i]);
 		}
 		
 		public function getIdEquipe()
@@ -63,8 +67,10 @@
 		{
 			for($i=0;$i<sizeof($this->m_tabJoueurs);++$i)
 			{
-				if($this->m_tabJoueurs[$i]->getCapitaine())
+				if($this->m_tabJoueurs[$i]->getCapitaine() === true)
+				{
 					return $this->m_tabJoueurs[$i];
+				}
 			}
 			
 			return null;
