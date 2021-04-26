@@ -11,7 +11,7 @@
 		public function __construct(int $nbEquipes)
 		{
 			$this->m_tas = array();
-			$this->m_tabMatchs = array((2*$nbEquipes)-1);
+			$this->m_tabMatchs = array();
 
 			$tour = 1 ;
 			while($nbEquipes > pow(2,$tour)){
@@ -23,8 +23,11 @@
 			if($nbEquipes-$a!=0){
 				for($i=0;$i<($this->m_nbCases+$a);++$i){
 					array_push($this->m_tas, null);
+					array_push($this->m_tabMatchs, null);
 				}
 			}
+
+
 			
 		}
 		
@@ -203,12 +206,17 @@
 
 
 			echo '<div id="container">';
+			echo "XXXXXXXXXXXXX";
+			echo sizeof($this->m_tabMatchs) ;
+			echo sizeof($this->m_tas) ;
+			echo "XXXXXXXXXXXXX";
 
 			for($i=1;$i<=($this->nbTours());$i++){
 				echo'<section id=s'.$i.'>';
 				
 
 				for($j=$deb;$j>$deb-pow(2,$pui);--$j){
+					//echo $j;
 					if($this->m_tas[$j]!= null){
 						$nom = $this->m_tas[$j]->getNomEquipe();
 
