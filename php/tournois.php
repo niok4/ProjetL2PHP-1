@@ -3,7 +3,7 @@ include('../module/Tournoi.php');
 // Connexion à la base de données
 try
 {
-	$bdd = new PDO('mysql:host=localhost;dbname=projet;charset=utf8', 'root', 'Spacewalkerzx48!');
+	$bdd = new PDO('mysql:host=localhost;dbname=projet;charset=utf8', 'root', '');
 }
 catch(Exception $e)
 {
