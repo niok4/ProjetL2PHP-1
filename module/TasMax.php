@@ -66,7 +66,6 @@
 			$i = $this->m_nbCases - 1 ;
 			while($i!=0 && $this->m_tas[$i/2-1] != null){
 				$i = $i - 2 ;
-				echo $i;
 			}
 			$deb = $i ;
 			$fin = $i/2 ;
