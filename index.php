@@ -15,7 +15,7 @@
             <a href="php/creer_tournois.php">Créer Tournoi</a>
             <a href="php/tournois.php">Liste des Tournois</a>
             <a href="php/Preinscription.php">Preinscription</a>
-              <a href="php/CreerEquipe.php">Créer équipe</a>
+            <a href="php/CreerEquipe.php">Créer équipe</a>
             <a href="php/Tests.php">testArbre</a>
             <div class="topnav-right">
               <a href="php/Login.php">Connexion</a>
