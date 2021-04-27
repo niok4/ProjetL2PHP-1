@@ -36,7 +36,9 @@ th {
   color:white;
   border:2px solid white ; 
   border-collapse: collapse;
+  width:100px;
 }
+
 
 table,td {
   border:2px solid white ; 
