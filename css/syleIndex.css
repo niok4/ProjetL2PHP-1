@@ -67,15 +67,17 @@ p{
 	border:2px solid white;
 }
 
+.inscription {
+	width:100%;
+	text-align:center;
+}
+
 .inscription a{
 	border:3px inset white;
 	background-color:#333333;
 	border-radius:15px;
 	color:white;
-
-	margin-left:47%;
 	padding:11px;
-
 	text-decoration: none;
 	font-size:18px;
 	font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -83,4 +85,67 @@ p{
 
 .inscription a:hover {
 	color:yellow;
+}
+
+#container{
+	margin:auto;
+	height:50%;
+	width:50%;
+	background-color:#333333;
+	border:5px groove white;
+	box-shadow: 10px 10px black;
+}
+
+h2 {
+	font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	color:white;
+	text-transform:uppercase;;
+	font-size:35px;
+}
+
+form {
+	text-align:center;
+    margin:auto;
+    width:550px;
+}
+body div img {
+	width:50px;
+    border:5px groove white;
+    padding:5px;
+}
+button {
+    margin:auto;
+    font-size:20px;
+}
+
+button:hover {
+	border:red;
+}
+
+.creer{
+	margin:auto;
+	width:100%;
+	color:white;
+	font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	font-size:20px;
+	text-align:center;
+	padding:0 0 20px;
+}
+
+input[type=text], input[type=number], input[type=date] {
+	width: 100%;
+    padding: 10px;
+    margin: 2% 0 15px 0;
+    display: inline-block;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    border: none;
+    background:white;
+    border-radius:5px;
+    font-size:20px;
+    color:black;
+}
+
+input[type=text]:focus, input[type=number]:focus, input[type=date]:focus {
+	background-color: #ffffb3;
+    outline: none;
 }
