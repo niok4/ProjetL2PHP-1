@@ -124,8 +124,8 @@
 			return $this->m_tabMatchs;
 		}
 
-		public function getMatch($i){
-			return $this->m_tabMatchs[$i];
+		public function getMatch($i,$j){
+			return $this->m_tabMatchs[$i][$j];
 		}
 
 		public function getTas(){
