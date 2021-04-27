@@ -1,51 +1,8 @@
 <?php
-include('../module/Tournoi.php');
-// Connexion à la base de données
-try
-{
-	$bdd = new PDO('mysql:host=localhost;dbname=projet;charset=utf8', 'root', '');
-}
-catch(Exception $e)
-{
-        die('Erreur : '.$e->getMessage());
-}
 
-$tabTournoi = array();
-
-$tabLieu = array();
-$tabNom = array();
-$tabDate = array(); 
-$tabDuree = array();
-$tabNbEquipes = array();
-$i=0;
-
-$getNom = $bdd->query("SELECT nom FROM Tournoi");
-$getLieu = $bdd->query("SELECT lieu FROM Tournoi");
-$getDate = $bdd->query("SELECT dateDeb FROM Tournoi WHERE month(dateDeb)");
-$getDuree = $bdd->query("SELECT duree FROM Tournoi");
-$getNbEquipes = $bdd->query("SELECT nombreTotalEquipes FROM Tournoi");
-
-while($test=$getLieu->fetch()){
-    
-    $tabLieu[$i] = $test['lieu'];
-    $test2 = $getDate->fetch();
-    $tabDate[$i] = $test2['dateDeb'];
-    $test3 = $getNom->fetch();
-    $tabNom[$i] = $test3['nom'];
-    $test4 = $getDuree->fetch();
-    $tabDuree[$i] = $test4['duree'];
-    $test5 = $getNbEquipes->fetch();
-    $tabNbEquipes[$i] = $test5['nombreTotalEquipes'];
-    
-    ++$i;
-
-}
-
-$getLieu->closeCursor();
-$getDate->closeCursor();
-$getNom->closeCursor();
-$getDuree->closeCursor();
-$getNbEquipes->closeCursor();
+include('../BDD/reqTournoi.php');
+include('../BDD/reqEquipe.php');
+$tabTournois= getAllTournoi();
 ?>
 
 <!DOCTYPE html>
@@ -73,82 +30,95 @@ $getNbEquipes->closeCursor();
         <p style="text-align: center;">Tournois passés</p>
     </h1>
     <?php
-    $taille = sizeof($tabLieu);
+    
     /*
     Sur la page Html
-    Pour les tournois passés remplacer durée par date de fin.
-    Pour les tournois en cours et à venir, laisser durée.
     Rajouter un lien cliquable vers le tournoi relantant des informations.
     Rajouter le vainqueur pour les tournois passés ?
     Rajouter Lien vers description de équipes du tournoi, puis composition de chaque équipe ?
     Rajouter lien vers l'arbre associé des tournois en cours et terminés
+    Creer une page avec un menu déroulant ?
+    Dans un premier temps on pourra soit cliquer sur les tournois en cours passés et à venir.
+    Puis un tableau déroulant avec les bons tournois va s'afficher.
+    Ou alors créer une barre de recherche qui va rechercher les tournois par nom/date/nbEquipes ?
+
     */
-
     echo '<table>
-        <tr>
-            <th>Nom</th>
-            <th>Lieu</th>
-            <th>Date début</th>
-            <th>Durée</th>
-            <th>Nombre d'."'".'équipes</th>
-        </tr>';
-        for($i=0;$i<$taille;++$i){
-            echo'<tr>';
-            echo '<td>'.$tabNom[$i].'</td>';
-            echo '<td>'.$tabLieu[$i].'</td>';
-            echo '<td>'.$tabDate[$i].'</td>';
-            echo '<td>'.$tabDuree[$i].'</td>';
-            echo '<td>'.$tabNbEquipes[$i].'</td>';
-            echo'</tr>';
+    <tr>
+    <th>Nom</th>
+    <th>Lieu</th>
+    <th>Début</th>
+    <th>Fin</th>
+    <th>Durée</th>
+    <th>Nombre d'."'".'équipes</th>
+    </tr>';
+    for($i=0;$i<sizeof($tabTournois);++$i){
+        echo'<tr>';
+        if($tabTournois[$i]->termine()){
+            echo '<td>'.$tabTournois[$i]->getNom().'</td>';
+            echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
+            echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
+            echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>';
+            echo '<td>'.$tabTournois[$i]->getDuree().' jours</td>';
+            echo '<td>'.$tabTournois[$i]->getNombreTotalEquipes().'</td>';
         }
+        echo'</tr>';
+    }
+    echo'</table>';
 
-        echo'</table>';
+
     ?>
 </div>
 <div class="cadre">   
     <h1>
         <p style="text-align: center;">Tournois en cours</p>
     </h1>
-    <table>
-        <tr>
-            <th>Nom</th>
-            <th>Lieu</th>
-            <th>Date début</th>
-            <th>Durée</th>
-            <th>Nombre d'équipes</th>
-
-        </tr>
-        <tr>
-            <td>empty</td>
-            <td>empty</td>
-            <td>empty</td>
-            <td>empty</td>
-            <td>empty</td>
-        </tr>
-    </table>
+    <?php
+    echo '<table>
+    <tr>
+    <th>Nom</th>
+    <th>Lieu</th>
+    <th>Date début</th>
+    <th>Nombre d'."'".'équipes</th>
+    </tr>';
+    for($i=0;$i<sizeof($tabTournois);++$i){
+        echo'<tr>';
+        if($tabTournois[$i]->enCours()){
+            echo '<td>'.$tabTournois[$i]->getNom().'</td>';
+            echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
+            echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
+            echo '<td>'.$tabTournois[$i]->getNombreTotalEquipes().'</td>';
+        }
+        echo'</tr>';
+    }
+    echo'</table>';
+    ?>
 </div>
 
 <div class="cadre">   
     <h1>
         <p style="text-align: center;">Tournois à venir</p>
     </h1>
-    <table>
-        <tr>
-            <th>Nom</th>
-            <th>Lieu</th>
-            <th>Date début</th>
-            <th>Durée</th>
-            <th>Nombre d'équipes</th>
-
-        </tr>
-        <tr>
-            <td>empty</td>
-            <td>empty</td>
-            <td>empty</td>
-            <td>empty</td>
-            <td>empty</td>
-        </tr>
-    </table>
+    <?php
+    echo '<table>
+    <tr>
+    <th>Nom</th>
+    <th>Lieu</th>
+    <th>Date début</th>
+    <th>Nombre d'."'".'équipes</th>
+    </tr>';
+    for($i=0;$i<sizeof($tabTournois);++$i){
+        echo'<tr>';
+        if($tabTournois[$i]->aVenir()){
+            echo '<td>'.$tabTournois[$i]->getNom().'</td>';
+            echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
+            echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
+            echo '<td>'.$tabTournois[$i]->getNombreTotalEquipes().'</td>';
+        }
+        echo'</tr>';
+    }
+    echo'</table>';
+    ?>
 </div>
 
 
