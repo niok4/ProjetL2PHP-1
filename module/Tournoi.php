@@ -65,6 +65,8 @@
 		public function termine(){
 			$ajoutDuree = strtotime($this->m_dateDeb. '+'.$this->m_duree.' days');
 			$today = strtotime(date("d-m-Y"));
+			//echo $this->m_dateDeb ;
+			//echo '<br ./>';
 
 			return ($ajoutDuree<$today) ;
 		}
@@ -80,7 +82,6 @@
 		public function aVenir(){
 			$dateTournoi = strtotime($this->m_dateDeb);
 			$today = strtotime(date("d-m-Y"));
-
 			return ($dateTournoi>$today);
 		}
 

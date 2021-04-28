@@ -23,13 +23,12 @@ if(!estGestionnaire($ut->getIdUtilisateur()))
     exit();
 }
 
-
 //Après 7 ou 8 tournois crées il y a des erreurs dans la requête si on souhaite créer un autre tournoi
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href=".././css/syleIndex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syleIndex.css" />
     <style>
         .btn:hover {
             opacity:1;

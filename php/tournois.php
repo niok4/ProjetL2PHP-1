@@ -1,7 +1,5 @@
 <?php
-
-include('../BDD/reqTournoi.php');
-include('../BDD/reqEquipe.php');
+include_once('../BDD/reqEquipeTournoi.php');
 $tabTournois= getAllTournoi();
 ?>
 
@@ -41,6 +39,8 @@ $tabTournois= getAllTournoi();
     Dans un premier temps on pourra soit cliquer sur les tournois en cours passés et à venir.
     Puis un tableau déroulant avec les bons tournois va s'afficher.
     Ou alors créer une barre de recherche qui va rechercher les tournois par nom/date/nbEquipes ?
+    Attention si le gestionnaire est supprimé les tournois associés le sont aussi.
+    Une fois un tournoi terminé créer une gestionnaire reservoir ?
 
     */
     echo '<table>
@@ -50,7 +50,7 @@ $tabTournois= getAllTournoi();
     <th>Début</th>
     <th>Fin</th>
     <th>Durée</th>
-    <th>Nombre d'."'".'équipes</th>
+    <th>Equipes</th>
     </tr>';
     for($i=0;$i<sizeof($tabTournois);++$i){
         echo'<tr>';
@@ -78,8 +78,8 @@ $tabTournois= getAllTournoi();
     <tr>
     <th>Nom</th>
     <th>Lieu</th>
-    <th>Date début</th>
-    <th>Nombre d'."'".'équipes</th>
+    <th>Début</th>
+    <th>Equipes</th>
     </tr>';
     for($i=0;$i<sizeof($tabTournois);++$i){
         echo'<tr>';
@@ -104,16 +104,18 @@ $tabTournois= getAllTournoi();
     <tr>
     <th>Nom</th>
     <th>Lieu</th>
-    <th>Date début</th>
-    <th>Nombre d'."'".'équipes</th>
+    <th>Début</th>
+    <th>Equipes restantes</th>
     </tr>';
     for($i=0;$i<sizeof($tabTournois);++$i){
         echo'<tr>';
         if($tabTournois[$i]->aVenir()){
+            $nbPlaces = $tabTournois[$i]->getNombreTotalEquipes();
+            $nbInscrits = getNbEquipesTournoiWithId($tabTournois[$i]->getIdTournoi()) ;
             echo '<td>'.$tabTournois[$i]->getNom().'</td>';
             echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
             echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
-            echo '<td>'.$tabTournois[$i]->getNombreTotalEquipes().'</td>';
+            echo '<td>'.($nbPlaces-$nbInscrits).'/'.$nbPlaces.'</td>';
         }
         echo'</tr>';
     }

@@ -93,13 +93,6 @@ CREATE TABLE IF NOT EXISTS Preinscription
 INSERT INTO Utilisateur VALUES(0, "ADMIN", "Admin", "admin@test.com", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "Administrateur"), -- Mot de passe : admin
 (1, "DUJARDIN", "Jean", "JeanDujardin@test.com", "4ff17bc8ee5f240c792b8a41bfa2c58af726d83b925cf696af0c811627714c85", "Utilisateur"); -- Mot de passe : jean
 
-INSERT INTO Gestionnaire VALUES(1);
-
-INSERT INTO Tournoi VALUES(0, "Tournoi Tampon", "2021-04-08", "30", 1, "Montpellier", 4),
-(1, "Championnat du vin", "2021-04-08", "25", 1, "Paris", 4),
-(2, "Tournoi des saucissons", "2021-04-08", "65", 1, "Bordeaux", 4),
-(3, "Compétition de la vodka", "2021-04-30", "100", 1, "Moscow", 4);
-
 INSERT INTO Utilisateur VALUES(2, "Machin", "Truc", "M@T.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
 (3, "Jean", "Dupont", "J@D.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
 (4, "Henri", "Guibet", "H@G.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
@@ -114,8 +107,10 @@ INSERT INTO Utilisateur VALUES(2, "Machin", "Truc", "M@T.com", "74913f96f46a1399
 (13, "Line", "Renaud", "M@T.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur");
 -- Mot de passes des comptes 1 à 12 : unMotDePasse
 
-INSERT INTO Equipe VALUES(0, "bordeaux", 0, "Une adresse 1", "04-06-04-06-04"),
-(1, "psg", 0, "Une adresse 2", "04-06-04-06-04"),
+INSERT INTO Gestionnaire VALUES(0);
+
+INSERT INTO Equipe VALUES(0, "psg", 0, "Une adresse 2", "04-06-04-06-04"),
+(1, "bordeaux", 0, "Une adresse 1", "04-06-04-06-04"),
 (2, "montpellier", 0, "Une adresse 3", "04-06-04-06-04"),
 (3, "toulouse", 0, "Une adresse 4", "04-06-04-06-04"),
 (4, "lyon", 0, "Une adresse 5", "04-06-04-06-04"),
@@ -132,16 +127,20 @@ INSERT INTO Equipe VALUES(0, "bordeaux", 0, "Une adresse 1", "04-06-04-06-04"),
 (15, "monaco", 0, "Une adresse 16", "04-06-04-06-04");
 
 
-
-INSERT INTO Joueur VALUES(2, 0, true),
+INSERT INTO Joueur VALUES(1, 0, true),
+(2, 0, false),
 (3, 0, false),
-(4, 0, false),
-(5, 1, true),
+(4, 1, true),
+(5, 1, false),
 (6, 1, false),
-(7, 1, false),
-(8, 3, true),
-(9, 3, false),
-(10, 3, false),
-(11, 4, true),
-(12, 4, false),
-(13, 4, false);
+(7, 2, true),
+(8, 2, false),
+(9, 2, false),
+(10, 3, true),
+(11, 3, false),
+(12, 3, false);
+
+INSERT INTO Tournoi VALUES(0, "Championnat International", "2021-04-01", "20", 4, "Montpellier", 16),
+(1, "OpenTour", "2021-05-01", "90", 4, "Sydney", 10),
+(2, "Open Tennis 4", "2021-04-29", "4", 90, "Melbourne", 16),
+(3, "Golden Christmas", "2021-12-25", "50", 4, "Pôle Nord", 32);
