@@ -127,6 +127,12 @@ $id = $ut->getIdUtilisateur();
 				echo'</th></tr>
 				</table>';
 				echo '</div>';
+
+				echo'<div style="width:100%">
+				<form action="SaisieDateTournoi.php" method="post">
+				<button type"submit" class="envoi" name="setDate" value="" style="margin:auto">Saisir date</button>
+				</form>
+				</div>';
 		?>
 	</div>
 	<div class="container-main2">
@@ -174,34 +180,40 @@ $id = $ut->getIdUtilisateur();
 		echo'
 		</select>
 		</td>
-		<td><input type=date name="date" value="" ></td>
-		<td><input type=time name="time" value="" ></td>
+		<td>-</td>
+		<td>-</td>
 		<td><button type=submit name="valider" value="valider">Valider</button></td>
 		</tr>
 		</form>';
-		for($i=0;$i<($nbEquipesTotal/2);++$i)
+		for($i=0;$i<($nbEquipesTotal/2);++$i) //4
 		{
-			if($i<sizeof($tabMatchs) && sizeof($tabEquipesDejaChoisies)>0)
+			if($i<(sizeof($tabMatchs)-1) && sizeof($tabEquipesDejaChoisies)>0 && $i<(sizeof($tabEquipesDejaChoisies)-1))
 			{
-				$equipe1 = getEquipe($tabEquipesDejaChoisies[2*$i]);
+				$equipe1 = getEquipe($tabEquipesDejaChoisies[$i]);
 				$nom1 = $equipe1->getNomEquipe();
 				$equipe2 = getEquipe($tabEquipesDejaChoisies[$i+1]);
 				$nom2 = $equipe2->getNomEquipe();
 				$matchTemp = $tabMatchs[$i] ;
 
 
-				echo '<tr><td>Match n°'.($i+1).'</td><td>'.$nom1.'</td><td>'.$nom2.'</td><td>'.$matchTemp->getDate().'</td><td>'.$matchTemp->getHoraire().'</td><td>CHECK</td></tr>';
+				echo '<tr><td>Match n°'.($i+1).'</td><td>'.$nom1.'</td><td>'.$nom2.'</td><td>'.$matchTemp->getDate().'</td><td>'.$matchTemp->getHoraire().'</td></tr>';
 			}
 			else
 			{
-				echo'<tr><td>Match n°'.($i+1).'</td><td>/</td><td>/</td><td>/</td><td>/</td><td>/</td></tr>';
+				if(sizeof($tabMatchs)>0)
+				{
+					$matchTemp = $tabMatchs[$i] ;
+					echo '<tr><td>Match n°'.($i+1).'</td><td>undefined</td><td>undefined</td><td>'.$matchTemp->getDate().'</td><td>'.$matchTemp->getHoraire().'</td></tr>';
+				}
+				else
+					echo'<tr><td>Match n°'.($i+1).'</td><td>/</td><td>/</td><td>/</td></tr>';
 			}
 
 		}
 		echo '</table>
 		</div>';
 
-		if(isset($_POST['valider']) && isset($_POST['Equipe1']) && isset($_POST['Equipe2']) && sizeof($tabMatchs)<($nbEquipesTotal/2))
+		if(isset($_POST['valider']) && isset($_POST['Equipe1']) && isset($_POST['Equipe2']) /*&& sizeof($tabMatchs)<($nbEquipesTotal/2)*/)
 		{
 			if($_POST['Equipe1']==$_POST['Equipe2'] || ($_POST['Equipe1']=="none" || $_POST['Equipe2']=="none"))
 			{
@@ -210,21 +222,25 @@ $id = $ut->getIdUtilisateur();
 			}
 			else
 			{
-				if(insertMatchT($id,"2021-12-31","10:45"))
+				for($i=0;$i<sizeof($tabMatchs);++$i)
 				{
-					$idmatch = getLastIntegerId("MatchT","idMatchT");
-					if(insertEquipeMatchT($idmatch,$_POST["Equipe1"],$_POST["Equipe2"]))
+					if(!estEquipeMatchT($tabMatchs[$i]->getIdMatchT()))
+					{
+						insertEquipeMatchT($tabMatchs[$i]->getIdMatchT(),$_POST["Equipe1"],$_POST["Equipe2"]);
 						unset($_POST);
-			
-				}
+					}
+				}	
+				
 			}
 		}
+		/*
 		elseif(sizeof($tabMatchs)>($nbEquipesTotal/2))
 		{
 			echo '<p style=" font-family:Helvetica Neue,Helvetica,Arial,sans-serif;color:red;text-align:center">
 				ATTENTION : Tous les matchs ont déjà été entrés</p>';
 
 		}
+		*/
 
 
 	//$_POST = array();
