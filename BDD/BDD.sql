@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS Utilisateur
 	idUtilisateur INTEGER NOT NULL PRIMARY KEY,
 	nom VARCHAR(25) NOT NULL,
 	prenom VARCHAR(25) NOT NULL,
-	email VARCHAR(200) NOT NULL,
+	email VARCHAR(200) NOT NULL UNIQUE,
 	motDePasse VARCHAR(64) NOT NULL, -- Un VARCHAR de longueur 64 pour contenir un mot de passe hashé avec l'algorithme SHA-256.
 	role ENUM('Utilisateur', 'Administrateur') NOT NULL
 ) DEFAULT CHARSET=utf8;
@@ -37,10 +37,10 @@ CREATE TABLE IF NOT EXISTS Type
 CREATE TABLE IF NOT EXISTS Equipe
 (
 	idEquipe INTEGER NOT NULL PRIMARY KEY,
-	nomEquipe VARCHAR(25) NOT NULL,
+	nomEquipe VARCHAR(25) NOT NULL UNIQUE,
 	niveau INTEGER DEFAULT 0,
-	adresse VARCHAR(50) NOT NULL,
-	numTel VARCHAR(15) NOT NULL
+	adresse VARCHAR(50) NOT NULL UNIQUE,
+	numTel VARCHAR(15) NOT NULL UNIQUE
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS EquipeTournoi
@@ -90,57 +90,54 @@ CREATE TABLE IF NOT EXISTS Preinscription
 	CONSTRAINT FK_Preinscription_Tournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi) ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
-INSERT INTO Utilisateur VALUES(0, "ADMIN", "Admin", "admin@test.com", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "Administrateur"), -- Mot de passe : admin
-(1, "DUJARDIN", "Jean", "JeanDujardin@test.com", "4ff17bc8ee5f240c792b8a41bfa2c58af726d83b925cf696af0c811627714c85", "Utilisateur"); -- Mot de passe : jean
+INSERT INTO Utilisateur VALUES(1, "ADMIN", "Admin", "admin@test.com", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "Administrateur"), -- Mot de passe : admin
+(2, "DUJARDIN", "Jean", "JeanDujardin@test.com", "4ff17bc8ee5f240c792b8a41bfa2c58af726d83b925cf696af0c811627714c85", "Utilisateur"); -- Mot de passe : jean
 
-INSERT INTO Utilisateur VALUES(2, "Machin", "Truc", "M@T.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(3, "Jean", "Dupont", "J@D.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(4, "Henri", "Guibet", "H@G.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(5, "Louis", "De Funès", "L@F.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(6, "Jean", "Gabin", "J@G.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(7, "Robert", "Redford", "R@R.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(8, "Lino", "Ventura", "L@V.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(9, "Francis", "Blanche", "F@B.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(10, "Venantino", "Venantini", "V@V.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(11, "Jean", "Lefevre", "J@L.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(12, "Bernard", "Blier", "B@B.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
-(13, "Line", "Renaud", "M@T.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur");
+INSERT INTO Gestionnaire VALUES(2);
+
+INSERT INTO Tournoi VALUES(1, "OPEN TOUR", "2021-05-01", "30", 2, "Montpellier", 8);
+INSERT INTO Tournoi VALUES(2, "Coupe du Monde", "2022-01-01", "30", 2, "Neuilly", 10);
+INSERT INTO Tournoi VALUES(3, "Tournoi International", "2021-04-25", "45", 2, "Paris", 64);
+INSERT INTO Tournoi VALUES(4, "Compétition de la vodka", "2021-04-08", "30", 2, "Nice", 4);
+
+INSERT INTO Utilisateur VALUES(3, "Machin", "Truc", "M@T.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(4, "Jean", "Dupont", "J@D.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(5, "Henri", "Guibet", "H@G.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(6, "Louis", "De Funès", "L@F.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(7, "Jean", "Gabin", "J@G.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(8, "Robert", "Redford", "R@R.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(9, "Lino", "Ventura", "L@V.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(10, "Francis", "Blanche", "F@B.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(11, "Venantino", "Venantini", "V@V.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(12, "Jean", "Lefevre", "J@L.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(13, "Bernard", "Blier", "B@B.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(14, "Line", "Renaud", "L@R.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(15, "Jean-Pierre", "Marielle", "JP@M.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(16, "Jean", "Rochefort", "J@R.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(17, "Jean-Pierre", "Belmondo", "JP@B.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(18, "Philippe", "Noiret", "P@N.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(19, "Claude", "Rich", "C@R.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(20, "Guy", "Bedos", "G@B.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(21, "Claude", "Brasseur", "C@B.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(22, "Pierre", "Richard", "P@R.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur"),
+(23, "Mireille", "Darc", "M@D.com", "74913f96f46a13995ef292f85deffae7b86a35d5d3180a5581b04b12b7b30245", "Utilisateur");
 -- Mot de passes des comptes 1 à 12 : unMotDePasse
 
-INSERT INTO Gestionnaire VALUES(0);
+INSERT INTO Equipe VALUES(1, "PSG", 0, "Une adresse 1", "01-02-01-02-01"),
+(2, "BORDEAUX", 0, "Une adresse 2", "02-03-02-03-02"),
+(3, "MARSEILLE", 0, "Une adresse 3", "03-04-03-04-03"),
+(4, "LYON", 0, "Une adresse 4", "04-05-04-05-04"),
+(5, "ST-ETIENNE", 0, "Une adresse 5", "05-06-05-06-05");
 
-INSERT INTO Equipe VALUES(0, "psg", 0, "Une adresse 2", "04-06-04-06-04"),
-(1, "bordeaux", 0, "Une adresse 1", "04-06-04-06-04"),
-(2, "montpellier", 0, "Une adresse 3", "04-06-04-06-04"),
-(3, "toulouse", 0, "Une adresse 4", "04-06-04-06-04"),
-(4, "lyon", 0, "Une adresse 5", "04-06-04-06-04"),
-(5, "om", 0, "Une adresse 6", "04-06-04-06-04"),
-(6, "saint-etienne", 0, "Une adresse 7", "04-06-04-06-04"),
-(7, "barcelone", 0, "Une adresse 8", "04-06-04-06-04"),
-(8, "real madrid", 0, "Une adresse 9", "04-06-04-06-04"),
-(9, "manchester", 0, "Une adresse 10", "04-06-04-06-04"),
-(10, "juvintus", 0, "Une adresse 11", "04-06-04-06-04"),
-(11, "chelsea", 0, "Une adresse 12", "04-06-04-06-04"),
-(12, "lille", 0, "Une adresse 13", "04-06-04-06-04"),
-(13, "milan", 0, "Une adresse 14", "04-06-04-06-04"),
-(14, "liverpool", 0, "Une adresse 15", "04-06-04-06-04"),
-(15, "monaco", 0, "Une adresse 16", "04-06-04-06-04");
-
-
-INSERT INTO Joueur VALUES(1, 0, true),
-(2, 0, false),
-(3, 0, false),
-(4, 1, true),
-(5, 1, false),
-(6, 1, false),
-(7, 2, true),
-(8, 2, false),
-(9, 2, false),
-(10, 3, true),
-(11, 3, false),
-(12, 3, false);
-
-INSERT INTO Tournoi VALUES(0, "Championnat International", "2021-04-01", "20", 4, "Montpellier", 16),
-(1, "OpenTour", "2021-05-01", "90", 4, "Sydney", 10),
-(2, "Open Tennis 4", "2021-04-29", "4", 90, "Melbourne", 16),
-(3, "Golden Christmas", "2021-12-25", "50", 4, "Pôle Nord", 32);
+INSERT INTO Joueur VALUES(2, 1, true),
+(3, 1, false),
+(4, 1, false),
+(5, 2, true),
+(6, 2, false),
+(7, 2, false),
+(8, 3, true),
+(9, 3, false),
+(10, 3, false),
+(11, 4, true),
+(12, 4, false),
+(13, 4, false);

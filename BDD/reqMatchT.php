@@ -1,11 +1,13 @@
 <?php
-	include_once('reqUtilisateur.php');
-	include_once('../module/Utilisateur.php');
-	include_once('../module/Gestionnaire.php');
-	
-	function insertGestionnaireForExistingUtilisateur(int $idG)
-	{
-		include('DataBaseLogin.inc.php');
+	include_once('reqTournoi.php');
+	include_once('../module/MatchT.php');
+
+	function insertMatchT(int $idTournoi,string $date, string $horaire)
+    {
+        include('DataBaseLogin.inc.php');
+
+        if(!estTournoi($idTournoi))
+			trigger_error("ERREUR : Identifiant de tournoi invalide.");
 		
 		$connexion = new mysqli($server, $user, $passwd, $db);
 	
@@ -13,24 +15,26 @@
 		{
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
-		
-		$requete = "INSERT INTO Gestionnaire VALUES($idG);";
-		
-		$res = $connexion->query($requete);
+
+        $idMatchT = chooseIntegerIdSequential("MatchT", "idMatchT");
+
+        $requete = "INSERT INTO MatchT VALUES($idMatchT,$idTournoi,'$date','$horaire');";
+
+        $res = $connexion->query($requete);
 		if(!$res)
 			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
 		
 		$connexion->close();
 		
-		unset($_POST);
+		//unset($_POST);
+
+		return true;
 		
-		echo "1";
-		
-		header('Location: ../php/resCreerGestionnaire.php');
 		exit();
-	}
-	
-	function estGestionnaire(string $id)
+
+    }
+
+    function estMatchT(string $id)
 	{
 		include('DataBaseLogin.inc.php');
 		
@@ -41,7 +45,7 @@
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
 		
-		$requete = "SELECT idGestionnaire FROM Gestionnaire WHERE idGestionnaire = \"$id\";";
+		$requete = "SELECT idMatchT FROM MatchT WHERE idMatchT = \"$id\";";
 		
 		$res = $connexion->query($requete);
 		if(!$res)
@@ -53,17 +57,17 @@
 		}
 		
 		$objTemp = $res->fetch_object();
-		$idGestionnaire = strval($objTemp->idGestionnaire);
+		$idMatchT = strval($objTemp->idMatchT);
 		
 		$connexion->close();
 		
-		if(empty($idGestionnaire))
+		if(empty($idMatchT))
 			return false;
 		
 		return true;
 	}
 	
-	function getGestionnaire(string $id)
+	function getMatchT(string $id)
 	{
 		include('DataBaseLogin.inc.php');
 		
@@ -74,7 +78,7 @@
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
 		
-		$requete = "SELECT * FROM Gestionnaire WHERE idGestionnaire = \"$id\";";
+		$requete = "SELECT * FROM MatchT WHERE idMatchT = \"$id\";";
 		
 		$res = $connexion->query($requete);
 		if(!$res)
@@ -86,30 +90,31 @@
 		}
 		
 		$objTemp = $res->fetch_object();
-		$idGestionnaire = strval($objTemp->idGestionnaire);
+		$idMatchT = strval($objTemp->idMatchT);
+		$idTournoi = strval($objTemp->idTournoi);
+		$date = strval($objTemp->date);
+		$horaire = strval($objTemp->horaire);
 		
 		$connexion->close();
 		
-		if(empty($idGestionnaire))
+		if(empty($idMatchT))
 			return NULL;
 		
-		$ut = getUtilisateur($id);
-		
-		return new Gestionnaire($ut->getIdUtilisateur(), $ut->getNom(), $ut->getPrenom(), $ut->getEmail(), $ut->getMdp(), $ut->getRole(), $idGestionnaire);
+		return new MatchT($idMatchT, $idTournoi, $date, $horaire);
 	}
 
-	function getAllGestionnaire()
+	function getAllMatchT(int $idTournoi)
 	{
 		include('DataBaseLogin.inc.php');
 		
 		$connexion = new mysqli($server, $user, $passwd, $db);
-		
+	
 		if($connexion->connect_error)
 		{
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
 		
-		$requete = "SELECT * FROM Gestionnaire ;";
+		$requete = "SELECT * FROM MatchT WHERE idTournoi = \"$idTournoi\";";
 		
 		$res = $connexion->query($requete);
 		if(!$res)
@@ -120,20 +125,23 @@
 			return NULL;
 		}
 		
-		$nbGestionnaires = $res->num_rows;
+		$nbMatchs = $res->num_rows;
 		
 		$connexion->close();
 		
-		$tabGestionnaires = array();
+		$tabMatchT = array();
 		
-		if($nbGestionnaires == 0)
-			return $tabGestionnaires;
+		if($nbMatchs == 0)
+			return $tabMatchT;
 		
 		while($obj = $res->fetch_object())
 		{
-			array_push($tabGestionnaires, getGestionnaire($obj->idGestionnaire));
+			array_push($tabMatchT, getMatchT($obj->idMatchT));
 		}
 		
-		return $tabGestionnaires;
+		return $tabMatchT;
 	}
+
+	//fonction qui récupère tous les Matchs d'un tournoi en fonction de l'idT
+	//fonction qui récupère tous les matchs d'un tour en fonction de l'idT et du tour
 ?>

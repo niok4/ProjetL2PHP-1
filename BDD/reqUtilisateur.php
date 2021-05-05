@@ -1,6 +1,6 @@
 <?php
 	include_once('reqGeneralBDD.php');
-	include_once('../module/Utilisateur.php');
+	include_once(realpath(dirname(__FILE__)).'/../module/Utilisateur.php');
 	
 	function insertUtilisateur(string $nom, string $prenom, string $email, string $mdp, string $confirmation, string $role)
 	{
@@ -13,7 +13,7 @@
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
 		
-		$idU = lineCount("Utilisateur") + 1;
+		$idU = chooseIntegerIdSequential("Utilisateur", "idUtilisateur");
 		
 		if(strcmp($mdp, $confirmation) != 0)
 			trigger_error("Le mot de passe et la confirmation ne correspondent pas.");
@@ -67,8 +67,8 @@
 			return false;
 		}
 		
-		$res->data_seek(0);
-		$verif = $res->fetch_assoc()["idUtilisateur"];
+		$objTemp = $res->fetch_object();
+		$verif = strval($objTemp->idUtilisateur);
 		
 		$connexion->close();
 		
@@ -103,8 +103,8 @@
 			return false;
 		}
 		
-		$res->data_seek(0);
-		$verif = $res->fetch_assoc()["idUtilisateur"];
+		$objTemp = $res->fetch_object();
+		$verif = strval($objTemp->idUtilisateur);
 		
 		$connexion->close();
 		
@@ -136,7 +136,6 @@
 			return NULL;
 		}
 		
-		//$res->data_seek(0);
 		$objTemp = $res->fetch_object();
 		$idUtilisateur = strval($objTemp->idUtilisateur);
 		$nom = strval($objTemp->nom);
@@ -175,7 +174,6 @@
 			return NULL;
 		}
 		
-		//$res->data_seek(0);
 		$objTemp = $res->fetch_object();
 		$idUtilisateur = strval($objTemp->idUtilisateur);
 		$nom = strval($objTemp->nom);
@@ -191,7 +189,7 @@
 		
 		return new Utilisateur($idUtilisateur, $nom, $prenom, $email, $motDePasse, $role);
 	}
-
+	
 	function getAllSimpleUtilisateur()
 	{
 		include('DataBaseLogin.inc.php');
@@ -221,7 +219,6 @@
 			return NULL;
 		}
 		
-		$res->fetch_assoc();
 		$nbUtilisateurs = $res->num_rows;
 		
 		$connexion->close();

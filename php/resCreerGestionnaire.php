@@ -38,7 +38,6 @@
 	
 	<body>
 		<div>
-			<a href="../index.php">Acceuil</a>
 			<a href="Login.php">Se connecter</a>
 			<a href="Logout.php">Se déconnecter</a>
 			<a href="Register.php">Créer un compte</a>

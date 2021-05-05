@@ -31,6 +31,33 @@
 		header('Location: ../php/Login.php');
 		exit();
 	}
+	//exactement la même fonction que intertTournoi();
+	function creerTournoi(string $nom, string $dateDeb, int $duree, int $idGestionnaire, string $lieu, int $nombreTotalEquipes)
+    {
+        include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+
+        $idT = chooseIntegerIdSequential("Tournoi", "idTournoi");
+
+        $requete = "INSERT INTO Tournoi VALUES($idT, '$nom','$dateDeb', $duree, $idGestionnaire, '$lieu',$nombreTotalEquipes);";
+
+        $res = $connexion->query($requete);
+		if(!$res)
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+		
+		$connexion->close();
+		
+		unset($_POST);
+		
+		header('Location: ../php/CreerTournoi.php');
+		exit();
+    }
 	
 	function estTournoi(string $id)
 	{
@@ -101,39 +128,12 @@
 		if(empty($idTournoi))
 			return NULL;
 		
-		//$gest = getGestionnaire($idGestionnaire);
+		$gest = getGestionnaire($idGestionnaire);
 		
-		return new Tournoi($idTournoi, $nom, $dateDeb, $duree, $idGestionnaire, $lieu, $nombreTotalEquipes);
+		return new Tournoi($idTournoi, $nom, $dateDeb, $duree, $gest->getIdGestionnaire(), $lieu, $nombreTotalEquipes);
 	}
-
-	function creerTournoi(string $nom, string $dateDeb, int $duree, int $idGestionnaire, string $lieu, int $nombreTotalEquipes)
-    {
-        include('DataBaseLogin.inc.php');
-		
-		$connexion = new mysqli($server, $user, $passwd, $db);
 	
-		if($connexion->connect_error)
-		{
-			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
-		}
-
-        $idT = lineCount("Tournoi") + 1;
-
-        $requete = "INSERT INTO Tournoi VALUES($idT, '$nom','$dateDeb', $duree, $idGestionnaire, '$lieu',$nombreTotalEquipes);";
-
-        $res = $connexion->query($requete);
-		if(!$res)
-			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
-		
-		$connexion->close();
-		
-		unset($_POST);
-		
-		header('Location: ../php/creer_tournois.php');
-		exit();
-    }
-
-    function getTournoiWithIdGestionnaire(string $id, int $indexTournoi)
+	function getTournoiWithIdGestionnaire(string $id, int $indexTournoi)
 	{
 		include('DataBaseLogin.inc.php');
 		
@@ -155,7 +155,6 @@
 			return NULL;
 		}
 		
-		$res->fetch_assoc();
 		$nbTournois = $res->num_rows;
 		
 		$connexion->close();
@@ -175,7 +174,7 @@
 		
 		return $tabTournois[$indexTournoi];
 	}
-
+	
 	function getAllTournoiWithIdGestionnaire(string $id)
 	{
 		include('DataBaseLogin.inc.php');
@@ -198,7 +197,6 @@
 			return NULL;
 		}
 		
-		$res->fetch_assoc();
 		$nbTournois = $res->num_rows;
 		
 		$connexion->close();
@@ -216,7 +214,44 @@
 		return $tabTournois;
 	}
 
+	function getAllTournoiWithIdGestionnaireByDate(string $id)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
 	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT * FROM Tournoi WHERE idGestionnaire = \"$id\" ORDER BY dateDeb;";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		
+		$nbTournois = $res->num_rows;
+		
+		$connexion->close();
+		
+		$tabTournois = array();
+		
+		if($nbTournois == 0)
+			return NULL;
+		
+		while($obj = $res->fetch_object())
+		{
+			array_push($tabTournois, getTournoi($obj->idTournoi));
+		}
+		
+		return $tabTournois;
+	}
 	
 	function getAllTournoi()
 	{
@@ -230,7 +265,6 @@
 		}
 		
 		$requete = "SELECT * FROM Tournoi;";
-
 		
 		$res = $connexion->query($requete);
 		if(!$res)
@@ -240,19 +274,51 @@
 			
 			return NULL;
 		}
-
-		//Pour ne pas ignorer la première valeur, il faut replacer le pointeur à 0;
 		
-		$res->fetch_assoc();
 		$nbTournois = $res->num_rows;
-		$res->data_seek(0);
-
-
+		
 		$connexion->close();
 		
 		$tabTournois = array();
-		//echo $nbTournois;
+		
+		if($nbTournois == 0)
+			return $tabTournois;
+		
+		while($obj = $res->fetch_object())
+		{
+			array_push($tabTournois, getTournoi($obj->idTournoi));
+		}
+		
+		return $tabTournois;
+	}
 
+	function getAllTournoibyDate()
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT * FROM Tournoi ORDER BY dateDeb;";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		
+		$nbTournois = $res->num_rows;
+		
+		$connexion->close();
+		
+		$tabTournois = array();
 		
 		if($nbTournois == 0)
 			return $tabTournois;
@@ -265,5 +331,3 @@
 		return $tabTournois;
 	}
 ?>
-
-

@@ -1,15 +1,17 @@
 <?php
 	include_once('../module/MatchT.php');
 	
-	class EquipeMatchT extends MatchT
+	class EquipeMatchT extends Entite
 	{
 		private $m_idEquipe;
 		private $m_score = -1;
+		private $m_idMatchT ;
 		
-		public function __construct(int $idEquipe,int $idMatch)
-		{
-			parent:: __construct($idMatch);
+		public function __construct(int $idEquipe,int $idMatch,int $score)
+		{	
+			$this->m_idMatchT = $idMatch ;
 			$this->m_idEquipe = $idEquipe;
+			$this->m_score = $score;
 		}
 		
 		//ACCESSEURS EN LECTURE
@@ -36,7 +38,7 @@
 			//setScoreAleatoire
 			$this->m_score = rand(0,10);
 		}
-
+		
 		public function setScoreVal($score)
 		{ 
 			$this->m_score = $score ;

@@ -20,7 +20,7 @@
 	if(!estJoueur($ut->getIdUtilisateur()))
 	{
 		trigger_error("Vous n'êtes pas un joueur d'équipe.");
-		header('Location: ../index.php');
+		header('Location: index.php');
 		exit();
 	}
 	
@@ -29,7 +29,7 @@
 	if(!$joueur->getCapitaine())
 	{
 		trigger_error("Vous n'êtes pas un capitaine d'équipe.");
-		header('Location: ../index.php');
+		header('Location: index.php');
 		exit();
 	}
 	
@@ -65,6 +65,15 @@
 	</head>
 	
 	<body>
+		<div>
+			<a href="Login.php">Se connecter</a>
+			<a href="Logout.php">Se déconnecter</a>
+			<a href="Register.php">Créer un compte</a>
+			<a href="CreerEquipe.php">Créer une équipe</a>
+			<a href="Preinscription.php">Pré-inscrire une équipe</a>
+			<a href="ChoixInscription.php">Gérer les inscriptions d'un tournoi</a>
+		</div>
+		
 		<h1>Résultat de la pré-inscription d'une équipe</h1>
 		
 		<?php

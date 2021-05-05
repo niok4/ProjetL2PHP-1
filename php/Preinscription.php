@@ -74,7 +74,7 @@
 		insertEquipeTournoi(strval($equipe->getIdEquipe()), strval($_POST['Tournoi']), false);
 	}
 	
-	$_POST = array();    
+	$_POST = array();
 ?>
 
 <!DOCTYPE html>
@@ -88,7 +88,6 @@
 	
 	<body>
 		<div>
-			<a href="../index.php">Acceuil</a>
 			<a href="Login.php">Se connecter</a>
 			<a href="Logout.php">Se déconnecter</a>
 			<a href="Register.php">Créer un compte</a>
@@ -96,6 +95,7 @@
 			<a href="Preinscription.php">Pré-inscrire une équipe</a>
 			<a href="ChoixInscription.php">Gérer les inscriptions d'un tournoi</a>
 		</div>
+		
 		<form action="Preinscription.php" method="POST" onreset="return vider();" class="container">
 			<h1>
 				<p style="text-align: center;">Pré-inscripition</p>

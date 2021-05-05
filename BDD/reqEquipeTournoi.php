@@ -1,6 +1,7 @@
 <?php
 	include_once('reqEquipe.php');
 	include_once('reqTournoi.php');
+	include_once('reqEquipeTournoi.php');
 	include_once('../module/EquipeTournoi.php');
 	include_once('../module/FctGenerales.php');
 	
@@ -25,8 +26,6 @@
 		
 		$requete = "INSERT INTO EquipeTournoi(`idEquipe`, `idTournoi`, `estInscrite`) VALUES($idE, $idT, $estIns);";
 		
-		echo "Requête : ".$requete;
-		
 		$res = $connexion->query($requete);
 		if(!$res)
 			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
@@ -38,7 +37,7 @@
 		header('Location: ../php/resPreInscription.php');
 		exit();
 	}
-
+	
 	function modifierEquipeTournoi(int $idE, int $idT, bool $estInscrite)
 	{
 		include('DataBaseLogin.inc.php');
@@ -175,7 +174,7 @@
 		
 		return new EquipeTournoi($idEquipe, $idTournoi, $estInscrite);
 	}
-
+	
 	function getEquipeTournoiWithIdTournoi(string $idT)
 	{
 		include('DataBaseLogin.inc.php');
@@ -186,13 +185,11 @@
 		{
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
-		/*
+		
 		$requete = "SELECT E.idEquipe, ET.idTournoi
 		FROM Equipe E
 		INNER JOIN EquipeTournoi ET
 		WHERE E.idEquipe = ET.idEquipe AND ET.idTournoi = $idT;";
-		*/
-		$requete = "SELECT idEquipe FROM EquipeTournoi WHERE idTournoi=$idT";
 		
 		$res = $connexion->query($requete);
 		if(!$res)
@@ -203,28 +200,23 @@
 			return NULL;
 		}
 		
-		//$res->fetch_assoc();
 		$nbEquipeTournoi = $res->num_rows;
-		//$res->data_seek(0);
 		
 		$connexion->close();
 		
 		$tabEquipeTournoi = array();
 		
-		
 		if($nbEquipeTournoi == 0)
 			return $tabEquipeTournoi;
-		
-		$i = 0;
 		
 		while($obj = $res->fetch_object())
 		{
 			array_push($tabEquipeTournoi, getEquipeTournoi($obj->idEquipe, $idT));
-			++$i;
 		}
+		
 		return $tabEquipeTournoi;
 	}
-
+	
 	function getNbEquipesTournoiWithId(string $idT)
 	{
 		include('DataBaseLogin.inc.php');
@@ -248,11 +240,52 @@
 			return NULL;
 		}
 
-		$res->fetch_assoc();
 		$nb = $res->num_rows; 
 
 		$connexion->close();	
 		
 		return $nb;
 	}
+
+	function melanger(int $idTournoi)
+	{
+		//pas de vérification pour savoir si l'équipe est inscrite ou pas.
+		//A rajouteer ?
+		$tabEquipesTournoi = getEquipeTournoiWithIdTournoi($idTournoi);
+		if(sizeof($tabEquipesTournoi)>0)
+		{
+			$nbEquipes = getNbEquipesTournoiWithId($idTournoi);
+			$tab = array($nbEquipes) ;
+			$random = rand(0,$nbEquipes-1);
+			$debut = $random + 1;
+			$fin = $random ;
+
+			if($random == $nbEquipes-1)
+			{
+				--$debut;
+				--$fin;
+			}
+
+			for($i=0;$i<$nbEquipes;$i=$i+2)
+			{
+				$tab[$i] = $tabEquipesTournoi[$debut]->getIdEquipe();
+				$tab[$i+1] = $tabEquipesTournoi[$fin]->getIdEquipe();
+						
+				if($debut == ($nbEquipes - 1))
+					$debut=0;
+				else
+					$debut=$debut+1;
+
+				if($fin == 0)
+					$fin = $nbEquipes - 1;
+				else
+					$fin = $fin - 1;
+			}
+
+			return $tab ;
+		}
+		else
+			return null;
+	}
+
 ?>

@@ -37,15 +37,15 @@
 						<label for=\"ChoixEstCapitaine\">Êtes-vous le capitaine de l'équipe ?</label>
 						<div id=\"ChoixEstCapitaine\">
 							<label for=\"EstCapitaine\">Oui</label>
-							<input type=\"radio\" name=\"EstCapitaine\" id=\"EstCapitaine\" value=\"EstCapitaine\">
+							<input type=\"radio\" name=\"EstCapitaine\" id=\"EstCapitaine\" value=\"EstCapitaine\" onclick=\"document.getElementById('NEstPasCapitaine').checked = false\">
 							
 							<label for=\"NEstPasCapitaine\">Non</label>
-							<input type=\"radio\" name=\"NEstPasCapitaine[]\" id=\"NEstPasCapitaine\" value=\"NEstPasCapitaine\">
+							<input type=\"radio\" name=\"NEstPasCapitaine[]\" id=\"NEstPasCapitaine\" value=\"NEstPasCapitaine\" onclick=\"document.getElementById('EstCapitaine').checked = false\">
 						</div>
 					</div>";
 	
 	$champChoixEquipe = "<div>
-	<select id=\"Equipe`\" name=\"Equipe\">
+	<select id=\"Equipe\" name=\"Equipe\">
 		<option value=\"\">---Choisissez votre équipe---</option>";
 	
 	for($i=0;$i<count($tabEquipes);++$i)
@@ -69,6 +69,16 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="../css/styleLogin.css" />
+		
+		<style>
+			body div img {
+				width:50px;
+				border:5px groove white;
+				padding:5px;
+				float:left;
+			}
+		</style>
+		
 		<script type="text/javascript" src="../js/RegisterJS.js"></script>
 		<title>Inscription</title>
 	</head>
@@ -79,19 +89,13 @@
 			<img src="../img/home.png">
 			</a>
 		</div>
-		<style>
-			body div img {
-				width:50px;
-				border:5px groove white;
-				padding:5px;
-				float:left;
-			}
-		</style>
 		
 		<form action="Register.php" method="POST" onreset="return vider();" class="container">
 			<h1>
 				<p style="text-align: center;">Inscription</p>
 			</h1>
+			
+			<p style="text-align: center;">Entrez vos information pour créer votre compte</p>
 			
 			<hr>
 			
@@ -108,7 +112,7 @@
 			<input type="password" placeholder="Entrez votre mot de passe" name="psw" id="psw" required>
 			
 			<label for="psw-repeat"><b>Confirmation</b></label>
-			<input type="password" placeholder="Confirmez votre mot de passe" name="psw_repeat" id="psw_repeat" required>
+			<input type="password" placeholder="Répétez votre mot de passe" name="psw_repeat" id="psw_repeat" required>
 			
 			<br>
 			
@@ -139,13 +143,12 @@
 			
 			<hr>
 			
-			<button type="submit" class="registerbtn" name="envoiValeurs" value="Envoyer">Inscription</button>
+			<button type="submit" class="registerbtn" name="envoiValeurs" value="Envoyer">Voilà</button>
+			<button type="reset" name="effacerValeurs" value="Effacer">Voilà 2</button>
 		</form>
 		
 		<div class="container-signin">
-			<p>Déjà inscrit ? 
-				<a href="Login.php">Connectez-vous</a>
-			</p>
+			<p>Vous avez un compte? <a href="Login.php">Connectez-vous</a></p>
 		</div>
 	</body>
 </html>

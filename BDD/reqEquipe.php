@@ -13,7 +13,7 @@
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
 		
-		$idE = lineCount("Equipe") + 1;
+		$idE = chooseIntegerIdSequential("Equipe", "idEquipe");
 		
 		$requete = "INSERT INTO Equipe VALUES($idE, '$nomEquipe', 0, '$adresse', '$numTel');";
 		
@@ -84,7 +84,6 @@
 			return NULL;
 		}
 		
-		//$res->data_seek(0);
 		$objTemp = $res->fetch_object();
 		$idEquipe = strval($objTemp->idEquipe);
 		$nomEquipe = strval($objTemp->nomEquipe);
@@ -117,7 +116,6 @@
 			return NULL;
 		}
 		
-		$res->fetch_assoc();
 		$nbJoueursEquipe = $res->num_rows;
 		
 		if($nbJoueursEquipe > 0)
@@ -139,7 +137,7 @@
 		include('DataBaseLogin.inc.php');
 		
 		$connexion = new mysqli($server, $user, $passwd, $db);
-	
+		
 		if($connexion->connect_error)
 		{
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
@@ -156,7 +154,6 @@
 			return NULL;
 		}
 		
-		$res->fetch_assoc();
 		$nbEquipes = $res->num_rows;
 		
 		$connexion->close();
@@ -168,7 +165,7 @@
 		
 		while($obj = $res->fetch_object())
 		{
-			array_push($tabEquipes, getEquipe($obj->idEquipe));
+			array_push($tabEquipes, getEquipe(strval($obj->idEquipe)));
 		}
 		
 		return $tabEquipes;

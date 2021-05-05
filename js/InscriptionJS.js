@@ -1,4 +1,4 @@
-function gestionSelectionInscription()
+/*function gestionSelectionInscription()
 {
 	console.log("yo");
 	
@@ -13,4 +13,4 @@ function gestionSelectionInscription()
 	{
 		radioOptionInscrire.checked = false;
 	}
-}
+}*/

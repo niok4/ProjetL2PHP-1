@@ -1,4 +1,3 @@
-
 <?php
 	function bool2SQLStr(bool $valeurBooleenne)
 	{
