@@ -34,6 +34,38 @@
 
     }
 
+
+    function IsAlreadyProgrammed(int $idT){
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		$requete = "SELECT * FROM MatchT WHERE idMatchT = \"$idT\";";
+
+		$res = $connexion->query($requete);
+		
+		if(!$res)
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+
+		
+		if(mysqli_num_rows($res) >0){
+			return true;
+		}
+		else{
+			return false;
+		}
+
+		$connexion->close();
+	}
+
+
+
+
+
     function estMatchT(string $id)
 	{
 		include('DataBaseLogin.inc.php');
