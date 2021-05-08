@@ -27,13 +27,13 @@ hr {
 }
 
 .container-main1 {
-  margin-top:30px;
+  margin-top:50px;
 }
 
 #tab {
   border:2px solid black ; 
   margin:auto;
-  margin-top:;
+  margin-bottom:50px;
   position:relative;
   width:60%;
   background-color:#333333;
@@ -74,6 +74,7 @@ hr {
   margin-top:;
   position:relative;
   width:95%;
+  border:1px solid black;
 }
 
 #tab1 table{
@@ -86,21 +87,13 @@ hr {
     font-size:20px;
     color:black;
     text-align:center;
-    border:;
+    border:1px solid black;
 }
 
 #tab1 th, #tab1 td {
   width:20%;
 }
 
-
-.envoi {
-  position:relative;
-  margin: auto;
-  border: none;
-  width: 20%;
-  margin-top:30px;
-}
 button {
   background-color: #0d0d0d;
   color: white;
@@ -114,4 +107,43 @@ button {
 button:hover {
   opacity:1;
   color:red;
+}
+
+
+#btn1, #btn2, #btn3 {
+  border:1px solid white;
+}
+
+.bouton {
+  background-color:;
+  position:relative;
+  margin:auto;
+  width:60%;
+}
+
+#tabDates {
+  border:2px solid black ; 
+  margin:auto;
+  margin-top:;
+  position:relative;
+  width:70%;
+  background-color:#333333;
+}
+
+#tabDates table{
+  width:100%;
+}
+
+#tabDates tr, #tabDates th, #tabDates td, #tabDates table {
+    border-collapse: collapse;
+    border:2px solid white ; 
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size:20px;
+    color:white;
+    text-align:center;
+    
+}
+
+#tabDates th, #tabDates td {
+  width:10%;
 }
