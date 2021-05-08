@@ -64,7 +64,23 @@ $id = $ut->getIdUtilisateur();
 		}
 		++$i;
 	}
-	echo "EDC=".sizeof($tabEquipesDejaChoisies);
+	//echo "EDC=".sizeof($tabEquipesDejaChoisies);
+
+	if(isset($_POST['melanger']) && $nbEquipesInscrites==$nbEquipesTotal && sizeof($tabEquipesDejaChoisies)==0 && sizeof($tabMatchs)>=$nbEquipesTotal/2)
+	{
+		$tabMelange = melanger($id);
+		for($i=0;$i<$nbEquipesTotal/2;+$i)
+		{
+			echo $tabMelange[$i] ;
+			//insertEquipeMatchT($tabMatchs[2*$i]->getIdMatchT(),$tabMelange[$i],$tabMelange[2*$i+1]);
+			/*
+				<form action="StatutTournoisAVenir.php" method="post">
+				<button type"submit" id="btn3" name="melanger" value="" style="margin:auto">Mélanger équipes</button>
+				</form>
+			*/
+		}
+
+	}
 
 ?>
 
@@ -127,140 +143,19 @@ $id = $ut->getIdUtilisateur();
 				echo'</th></tr>
 				</table>';
 				echo '</div>';
+				if(sizeof($tabMatchs)!=($nbEquipesTotal-1))
+				{
+					echo'<div class="bouton">
+					<form action="SaisieDateTournoi.php" method="post">
+					<button type"submit" id="btn1" name="setDate" value="" style="margin:auto">Saisir date</button>
+					</form>';
 
-				echo'<div style="width:100%">
-				<form action="SaisieDateTournoi.php" method="post">
-				<button type"submit" class="envoi" name="setDate" value="" style="margin:auto">Saisir date</button>
+				}
+				echo'<form action="SaisieMatchs.php" method="post">
+				<button type"submit" id="btn2" name="setDate" value="" style="margin:auto">Saisir Matchs 1er tour</button>
 				</form>
 				</div>';
 		?>
 	</div>
-	<div class="container-main2">
-		<h1 style="font-size:35px"></h1>
-		<?php
-		echo '<div id="tab1">
-		<form action="StatutTournoisAVenir.php" method="post">
-		<table>
-		<tr>
-		<th rowspan="2">Empty</th>
-		<th>Equipe A</th>
-		<th>Equipe B</th>
-		<th>Date</th>
-		<th>Horaire</th>
-		<th>Valider match</th>
-		</tr>
-		';
-		
-		echo '<tr>
-		<td>
-		<select id="Equipe" name="Equipe1">
-		<option value="none">Choisir équipe</option>';
-		for($j=0;$j<$nbEquipesInscrites;++$j)
-		{
-			$k=0;
-			while($k<sizeof($tabEquipesDejaChoisies) && $tabEquipesDejaChoisies[$k]!=$tabEquipes[$j]->getIdEquipe())
-				++$k;
-			if($k==sizeof($tabEquipesDejaChoisies))
-				echo '<option value="'.$tabEquipes[$j]->getIdEquipe().'">'.$tabEquipes[$j]->getNomEquipe().'</option>';
-		}
-		echo'
-		</select>
-		</td>
-		<td>
-		<select id="Equipe" name="Equipe2">
-		<option value="none">Choisir équipe</option>';
-		for($j=0;$j<$nbEquipesInscrites;++$j)
-		{
-			$k=0;
-			while($k<sizeof($tabEquipesDejaChoisies) && $tabEquipesDejaChoisies[$k]!=$tabEquipes[$j]->getIdEquipe())
-				++$k;
-			if($k==sizeof($tabEquipesDejaChoisies))
-				echo '<option value="'.$tabEquipes[$j]->getIdEquipe().'">'.$tabEquipes[$j]->getNomEquipe().'</option>';
-		}
-		echo'
-		</select>
-		</td>
-		<td>-</td>
-		<td>-</td>
-		<td><button type=submit name="valider" value="valider">Valider</button></td>
-		</tr>
-		</form>';
-		for($i=0;$i<($nbEquipesTotal/2);++$i) //4
-		{
-			if($i<(sizeof($tabMatchs)-1) && sizeof($tabEquipesDejaChoisies)>0 && $i<(sizeof($tabEquipesDejaChoisies)-1))
-			{
-				$equipe1 = getEquipe($tabEquipesDejaChoisies[$i]);
-				$nom1 = $equipe1->getNomEquipe();
-				$equipe2 = getEquipe($tabEquipesDejaChoisies[$i+1]);
-				$nom2 = $equipe2->getNomEquipe();
-				$matchTemp = $tabMatchs[$i] ;
-
-
-				echo '<tr><td>Match n°'.($i+1).'</td><td>'.$nom1.'</td><td>'.$nom2.'</td><td>'.$matchTemp->getDate().'</td><td>'.$matchTemp->getHoraire().'</td></tr>';
-			}
-			else
-			{
-				if(sizeof($tabMatchs)>0)
-				{
-					$matchTemp = $tabMatchs[$i] ;
-					echo '<tr><td>Match n°'.($i+1).'</td><td>undefined</td><td>undefined</td><td>'.$matchTemp->getDate().'</td><td>'.$matchTemp->getHoraire().'</td></tr>';
-				}
-				else
-					echo'<tr><td>Match n°'.($i+1).'</td><td>/</td><td>/</td><td>/</td></tr>';
-			}
-
-		}
-		echo '</table>
-		</div>';
-
-		if(isset($_POST['valider']) && isset($_POST['Equipe1']) && isset($_POST['Equipe2']) /*&& sizeof($tabMatchs)<($nbEquipesTotal/2)*/)
-		{
-			if($_POST['Equipe1']==$_POST['Equipe2'] || ($_POST['Equipe1']=="none" || $_POST['Equipe2']=="none"))
-			{
-					echo '<p style=" font-family:Helvetica Neue,Helvetica,Arial,sans-serif;color:red;text-align:center">
-				ATTENTION : Il faut entrer des équipes différentes</p>';
-			}
-			else
-			{
-				for($i=0;$i<sizeof($tabMatchs);++$i)
-				{
-					if(!estEquipeMatchT($tabMatchs[$i]->getIdMatchT()))
-					{
-						insertEquipeMatchT($tabMatchs[$i]->getIdMatchT(),$_POST["Equipe1"],$_POST["Equipe2"]);
-						unset($_POST);
-					}
-				}	
-				
-			}
-		}
-		/*
-		elseif(sizeof($tabMatchs)>($nbEquipesTotal/2))
-		{
-			echo '<p style=" font-family:Helvetica Neue,Helvetica,Arial,sans-serif;color:red;text-align:center">
-				ATTENTION : Tous les matchs ont déjà été entrés</p>';
-
-		}
-		*/
-
-
-	//$_POST = array();
-
-
-		echo '
-		</table>
-		</div>';
-		?>	
-
-	</div>
-	<div class="envoi">
-		<!--
-		<form action="StatutTournoisAVenir.php" method="get">
-			<?php
-			//echo'<button  type=submit name="tournoi" >Placer équipes</button>';
-			?>
-		</form>
-	-->
-	</div>
-
 </body>
 </html>

@@ -46,7 +46,7 @@
 		echo "Attention!!! pas assez d'equipe est inscrit pour programmer ce tournoi";
 	}
 	
-	if(isset($_POST) && isset($_POST['envoiValeurs']))
+	if(isset($_POST) && isset($_POST['envoiValeurs']) && !(IsAlreadyProgrammed($_SESSION['tournoi'])))
 	{
 		$machDansCeTour = $_POST['nbEquipe'] - 1;
 		
@@ -62,6 +62,8 @@
 				$machDansCeTour = $machDansCeTour - 1;
 			}
 		}
+		header ('Location: StatutTournoisAVenir.php');
+	
 		
 		
 	}
@@ -76,8 +78,10 @@
 		<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script> 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.9/jquery.datetimepicker.full.min.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.9/jquery.datetimepicker.css " /> 
+		<link rel="stylesheet" type="text/css" href="../css/styleStatut.css" />
 	</head>
 	<body>
+	<div class="container-main1">
 	<?php
 		if (!IsAlreadyProgrammed($_SESSION['tournoi'])){
 			echo '<h1>ATTENTION!!! Vous ne pouvez faire aucun changement après la programmation de ce tournoi</h1>';
@@ -90,7 +94,9 @@
 			$dureeDechaquetour = (int)$dureeDechaquetour;
 			$dateDeb = strtotime($TournoiEnGestion->getDateDeb());
 			echo '<form method="post" action="SaisieDateTournoi.php" >';
-			echo '<table>
+			echo '
+			<div id="tabDates">
+			<table>
 					<tr>
 					<th>Etape</th>
 					<th>Debut du Tour</th>
@@ -106,7 +112,7 @@
 				echo '<td>'.date("jS F, Y", $dateDeb).'</td>';
 				echo '<td>'.date("jS F, Y", $dateFin).'</td>';
 				
-				if(estGestionnaire($ut->getIdUtilisateur()) && !IsAlreadyProgrammed(1));
+				if(estGestionnaire($ut->getIdUtilisateur()) && !IsAlreadyProgrammed($_SESSION['tournoi']));
 				{
 					for($j=0;$j<$machDansCeTour;$j++)
 					{
@@ -136,7 +142,8 @@
 			if(!IsAlreadyProgrammed($_SESSION['tournoi']))
 			{
 				$idT = $_SESSION['tournoi'];
-				echo '</table>';
+				echo '</table>
+				</div>';
 				echo '<input id="nbTour" name="nbTour" value="'.($tasTournoi->nbTours() + 1).'" type="hidden" >';
 				echo '<input id="idT" name="idT" value="'.$idT.'" type="hidden" >';
 				echo '<input id="nbEquipes" name="nbEquipe" value="'.count($tabEquipe).'" type="hidden" >';
@@ -145,5 +152,6 @@
 			}
 		}
 		?>
+	</div>
 	</body>
 </html>
