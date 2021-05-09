@@ -37,7 +37,6 @@
 			<a href="php/CreerEquipe.php">Créer équipe</a>
 			<a href="php/ChoixInscription.php">Inscription</a>
 			<a href="php/Tests.php">testArbre</a>
-			<a href="php/matchTests.php">matchs</a>
 
 			
 			<?php
