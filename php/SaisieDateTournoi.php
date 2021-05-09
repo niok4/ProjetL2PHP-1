@@ -25,15 +25,21 @@
 	{
 		trigger_error("Aucun tournoi sélectionné !");
 	}
-	
-	if(IsAlreadyProgrammed($_SESSION['tournoi']))
-	{
-		trigger_error("Les dates des matchs de ce tournoi sont déjà définies !");
-	}
-	
+
     $ut = getUtilisateurWithEmail($_SESSION['login']);
     
 	$TournoiEnGestion = getTournoi($_SESSION['tournoi']);
+
+	$tabMatchs = getAllMatchT($TournoiEnGestion->getIdTournoi()) ;
+	$nbe = $TournoiEnGestion->getNombreTotalEquipes() ;
+	
+	if(sizeof($tabMatchs)==$nbe-1)
+	{
+		trigger_error("Les dates des matchs de ce tournoi sont déjà définies !");
+		header ('Location: StatutTournoisAVenir.php');
+	}
+
+
 	
 	if($TournoiEnGestion == NULL){
 		trigger_error("QQCH VA MAL");
@@ -63,9 +69,6 @@
 			}
 		}
 		header ('Location: StatutTournoisAVenir.php');
-	
-		
-		
 	}
 	
 	$_POST = array();
@@ -81,12 +84,16 @@
 		<link rel="stylesheet" type="text/css" href="../css/styleStatut.css" />
 	</head>
 	<body>
+	<div class="bandeau-haut">
+		<?php 
+			echo'<h1>'.$TournoiEnGestion->getNom().'</h1>';
+		?>
+	</div>
+	<hr>
+	<hr>
 	<div class="container-main1">
 	<?php
-		if (!IsAlreadyProgrammed($_SESSION['tournoi'])){
-			echo '<h1>ATTENTION!!! Vous ne pouvez faire aucun changement après la programmation de ce tournoi</h1>';
-		}
-		if ($TournoiEnGestion->aVenir()){
+		if($TournoiEnGestion->aVenir()){
 			$tasTournoi = new TasMax(count($tabEquipe));
 			$tasTournoi->insererAuxFeuilles($tabEquipe);
 			$nombreDetabe = 0;
@@ -98,9 +105,10 @@
 			<div id="tabDates">
 			<table>
 					<tr>
-					<th>Etape</th>
-					<th>Debut du Tour</th>
-					<th>Fin du Tour</th>
+					<th>Tour</th>
+					<th>Debut</th>
+					<th>Fin</th>
+					<th colspan=2>Dates et Horaires</th>
 					</tr>';
 			$machDansCeTour = 0;
 			$nombrequipe = count($tabEquipe);
@@ -108,28 +116,31 @@
 			{
 				$dateFin = strtotime("+$dureeDechaquetour days",$dateDeb);
 				echo '<tr>';
-				echo '<td>Etape '.$nombreDetabe.'</td>';
-				echo '<td>'.date("jS F, Y", $dateDeb).'</td>';
-				echo '<td>'.date("jS F, Y", $dateFin).'</td>';
+				echo '<td style="width:70px;font-weight: bold">Tour '.$nombreDetabe.'</td>';
+				echo '<td style="width:150px">'.date("d/m/Y", $dateDeb).'</td>';
+				echo '<td style="width:150px">'.date("d/m/Y", $dateFin).'</td>';
 				
 				if(estGestionnaire($ut->getIdUtilisateur()) && !IsAlreadyProgrammed($_SESSION['tournoi']));
 				{
 					for($j=0;$j<$machDansCeTour;$j++)
 					{
-						echo '<td>Entrez la date et heure de match '.($j+1).' de tour '.$nombreDetabe.'<input id="datetimepicker'.$nombreDetabe.$j.'" name="datetimepicker'.$nombreDetabe.$j.'" type="text" ></td> ';
+						echo '<td>(Match'.($j+1).')<input id="datetimepicker'.$nombreDetabe.$j.'" name="datetimepicker'.$nombreDetabe.$j.'" type="text" ></td> ';
 						echo "<script>
 						jQuery('#datetimepicker".$nombreDetabe.$j."').datetimepicker({
 							format:'Y-m-d H:i', 
 							minDate: '".date('Y-m-d', $dateDeb)."',
 							maxDate: '". date('Y-m-d', $dateFin)."',
-							allowTimes:[
-							'12:00', '13:00', '15:00', 
-							'17:00', '17:05', '17:20', '19:00', '20:00'
+							allowTimes:
+							[
+							'08:00' ,'10:00' ,'12:00', '14:00', '16:00', 
+							'18:00','20:00'
 							]
 						}); 
 						</script>";
 					}
 				}
+				if($i==0)
+					echo'<td colspan=2 style="font-style:italic">- Tour de préparation -</td>';
 				
 				$nombreDetabe++;
 				$machDansCeTour = $nombrequipe / 2;
@@ -147,8 +158,10 @@
 				echo '<input id="nbTour" name="nbTour" value="'.($tasTournoi->nbTours() + 1).'" type="hidden" >';
 				echo '<input id="idT" name="idT" value="'.$idT.'" type="hidden" >';
 				echo '<input id="nbEquipes" name="nbEquipe" value="'.count($tabEquipe).'" type="hidden" >';
-				echo '<button type="submit" class="btn"  name="envoiValeurs" value="Envoyer">programmer les matchs </button> ';
-				echo '</form>';
+				echo'<div class="bouton">';
+					echo '<button type="submit" id="btn1"  name="envoiValeurs" value="Envoyer">Saisir Dates</button> ';
+					echo '</form>
+				</div>';
 			}
 		}
 		?>

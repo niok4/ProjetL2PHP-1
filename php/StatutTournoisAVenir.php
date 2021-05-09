@@ -64,23 +64,6 @@ $id = $ut->getIdUtilisateur();
 		}
 		++$i;
 	}
-	//echo "EDC=".sizeof($tabEquipesDejaChoisies);
-
-	if(isset($_POST['melanger']) && $nbEquipesInscrites==$nbEquipesTotal && sizeof($tabEquipesDejaChoisies)==0 && sizeof($tabMatchs)>=$nbEquipesTotal/2)
-	{
-		$tabMelange = melanger($id);
-		for($i=0;$i<$nbEquipesTotal/2;+$i)
-		{
-			echo $tabMelange[$i] ;
-			//insertEquipeMatchT($tabMatchs[2*$i]->getIdMatchT(),$tabMelange[$i],$tabMelange[2*$i+1]);
-			/*
-				<form action="StatutTournoisAVenir.php" method="post">
-				<button type"submit" id="btn3" name="melanger" value="" style="margin:auto">Mélanger équipes</button>
-				</form>
-			*/
-		}
-
-	}
 
 ?>
 
@@ -114,8 +97,8 @@ $id = $ut->getIdUtilisateur();
 				</th>
 				</tr>';
 				for($i=0;$i<$nbEquipesTotal;++$i)
-				{				
-					if($tabEquipesTournoi[$i]!=null)
+				{
+					if(sizeof($tabEquipesTournoi)>0 && $tabEquipesTournoi[$i]!=null)
 					{
 						$equipe = getEquipe($tabEquipesTournoi[$i]->getIdEquipe()) ;
 						echo'
@@ -142,20 +125,28 @@ $id = $ut->getIdUtilisateur();
 					echo '<p style="text-align:center">- Inscriptions non terminées -</p>';
 				echo'</th></tr>
 				</table>';
-				echo '</div>';
+				echo '</div>
+				<div class="bouton">';
 				if(sizeof($tabMatchs)!=($nbEquipesTotal-1))
 				{
-					echo'<div class="bouton">
+					echo'
 					<form action="SaisieDateTournoi.php" method="post">
-					<button type"submit" id="btn1" name="setDate" value="" style="margin:auto">Saisir date</button>
+					<button type"submit" id="btn1" name="setDate" value="" style="margin-bottom:1%">Saisir Dates</button>
 					</form>';
 
 				}
-				echo'<form action="SaisieMatchs.php" method="post">
-				<button type"submit" id="btn2" name="setDate" value="" style="margin:auto">Saisir Matchs 1er tour</button>
-				</form>
-				</div>';
+				else
+				{
+					echo'<form action="SaisieMatchs.php" method="post">
+					<button type="submit" id="btn2" name="setDate" value="">Saisir / Consulter Matchs</button>
+					</form>
+					';
+				}
 		?>
+			<form action="Tournois.php" method="post">
+				<button type="submit" id="btn2" value="" style="margin:auto">Retour</button>
+			</form>
+		</div>
 	</div>
 </body>
 </html>
