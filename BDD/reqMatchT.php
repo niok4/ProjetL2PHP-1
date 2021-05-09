@@ -26,7 +26,6 @@
 		
 		$connexion->close();
 		
-		//unset($_POST);
 
 		return true;
 		
@@ -44,7 +43,7 @@
 		{
 			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
 		}
-		$requete = "SELECT * FROM MatchT WHERE idMatchT = \"$idT\";";
+		$requete = "SELECT * FROM MatchT WHERE idTournoi = \"$idT\";";
 
 		$res = $connexion->query($requete);
 		
@@ -60,6 +59,78 @@
 		}
 
 		$connexion->close();
+	}
+
+	function estMatchTWithIdEquipes(string $idTournoi, int $idEquipe)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT EquipeMatchT.idMatchT FROM EquipeMatchT,MatchT WHERE EquipeMatchT.idMatchT = MatchT.idMatchT AND idTournoi = $idTournoi AND idEquipe = $idEquipe";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return false;
+		}
+
+		$nb = $res->num_rows;
+		
+		if($nb>0)
+		{
+			$objTemp = $res->fetch_object();
+			$idMatchT = strval($objTemp->idMatchT);
+		}
+		
+		$connexion->close();
+		
+		if(empty($idMatchT))
+			return false;
+		
+		return true;
+	}
+
+	function melangerEquipes($tabEquipes)
+	{
+		$nbEquipes = sizeof($tabEquipes);
+		$tabEquipesMelangees = array($nbEquipes);
+		$random = rand(0,$nbEquipes-1);
+		$debut = $random + 1;
+		$fin = $random ;
+
+		if($random == $nbEquipes-1)
+		{
+			--$debut;
+			--$fin;
+		}
+
+		for($i=0;$i<$nbEquipes;$i=$i+2)
+		{
+			$tabEquipesMelangees[$i] = $tabEquipes[$debut]->getIdEquipe();
+			$tabEquipesMelangees[$i+1] = $tabEquipes[$fin]->getIdEquipe();
+						
+			if($debut == ($nbEquipes - 1))
+				$debut=0;
+			else
+				$debut=$debut+1;
+
+			if($fin == 0)
+				$fin = $nbEquipes - 1;
+			else
+				$fin = $fin - 1;
+		}
+
+		return $tabEquipesMelangees ;
+	
 	}
 
 
@@ -176,4 +247,83 @@
 
 	//fonction qui récupère tous les Matchs d'un tournoi en fonction de l'idT
 	//fonction qui récupère tous les matchs d'un tour en fonction de l'idT et du tour
+
+	function getAllEquipesNoMatchT(int $idTournoi)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT idEquipe FROM EquipeTournoi WHERE idTournoi=$idTournoi AND idEquipe NOT IN (SELECT idEquipe FROM EquipeMatchT, MatchT WHERE EquipeMatchT.idMatchT=MatchT.idMatchT AND MatchT.idTournoi=$idTournoi)";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		
+		$nbEquipes = $res->num_rows;
+		
+		$connexion->close();
+		
+		$tabEquipes = array();
+		
+		if($nbEquipes == 0)
+			return $tabEquipes;
+		
+		while($obj = $res->fetch_object())
+		{
+			array_push($tabEquipes, getEquipe($obj->idEquipe));
+		}
+		
+		return $tabEquipes;
+	}
+
+	function getAllEquipesWithMatchT(int $idTournoi)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT idEquipe FROM EquipeTournoi WHERE idTournoi=$idTournoi AND idEquipe IN (SELECT idEquipe FROM EquipeMatchT, MatchT WHERE EquipeMatchT.idMatchT=MatchT.idMatchT AND MatchT.idTournoi=$idTournoi)";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		
+		$nbEquipes = $res->num_rows;
+		
+		$connexion->close();
+		
+		$tabEquipes = array();
+		
+		if($nbEquipes == 0)
+			return $tabEquipes;
+		
+		while($obj = $res->fetch_object())
+		{
+			array_push($tabEquipes, getEquipe($obj->idEquipe));
+		}
+		
+		return $tabEquipes;
+	}
+
 ?>

@@ -35,14 +35,53 @@
 			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
 		
 		$connexion->close();
-		
-		//unset($_POST);
 
 		return true ;
 		
 		exit();
 
     }
+
+
+    function estEquipeMatchT(string $idMatchT)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT idMatchT FROM EquipeMatchT WHERE idMatchT = \"$idMatchT\";";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return false;
+		}
+
+		$nb = $res->num_rows;
+		
+		if($nb>0)
+		{
+			$objTemp = $res->fetch_object();
+			$id = strval($objTemp->idMatchT);
+		}
+		
+		$connexion->close();
+		
+		if(empty($id))
+			return false;
+		
+		return true;
+	}
+
+
 
 	
 	function getSingleEquipeMatchT(string $idEquipe, string $idMatchT)
@@ -150,7 +189,7 @@
 		
 		$connexion->close();
 		
-		unset($_POST);
+		//unset($_POST);
 		
 		return true;
 	}

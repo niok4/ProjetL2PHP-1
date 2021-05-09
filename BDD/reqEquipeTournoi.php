@@ -249,8 +249,7 @@
 
 	function melanger(int $idTournoi)
 	{
-		//pas de vérification pour savoir si l'équipe est inscrite ou pas.
-		//A rajouteer ?
+
 		$tabEquipesTournoi = getEquipeTournoiWithIdTournoi($idTournoi);
 		if(sizeof($tabEquipesTournoi)>0)
 		{
@@ -287,5 +286,6 @@
 		else
 			return null;
 	}
+	
 
 ?>
