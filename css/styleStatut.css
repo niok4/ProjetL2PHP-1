@@ -61,7 +61,7 @@ hr {
 .container-main2 {
   margin:auto;
   margin-top:70px;
-  width:80%;
+  width:90%;
   height:;
   background-color:#e6e6e6;
   border:5px solid #800000;
@@ -73,8 +73,8 @@ hr {
   margin:auto;
   margin-top:;
   position:relative;
-  width:95%;
-  border:1px solid black;
+  width:100%;
+  border:;
 }
 
 #tab1 table{
@@ -100,7 +100,7 @@ button {
   padding: 16px 20px;
   opacity: 0.9;
   border-radius:5px;
-  width:100%;
+  width:50%;
   cursor: pointer;
 }
 
@@ -110,12 +110,13 @@ button:hover {
 }
 
 
-#btn1, #btn2, #btn3 {
+#btn1, #btn2 {
   border:1px solid white;
+  width:100%;
+  margin:auto;
 }
 
 .bouton {
-  background-color:;
   position:relative;
   margin:auto;
   width:60%;
@@ -126,7 +127,7 @@ button:hover {
   margin:auto;
   margin-top:;
   position:relative;
-  width:70%;
+  width:90%;
   background-color:#333333;
 }
 
@@ -145,5 +146,10 @@ button:hover {
 }
 
 #tabDates th, #tabDates td {
-  width:10%;
+  width:;
+}
+
+input {
+  width:70%;
+  background-color:#e6e6e6;
 }
