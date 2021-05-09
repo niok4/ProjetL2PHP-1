@@ -228,7 +228,7 @@
 						echo'</div>';
 					}
 				}
-				if($estJoueur)
+				/*if($estJoueur)
 				{
 					$joueur = getJoueur($id);
 					$equipe = getEquipe($joueur->getIdEquipe()) ;
@@ -275,7 +275,7 @@
 					
 
 
-				}
+				}*/
 				
 				?>
 						
