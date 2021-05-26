@@ -65,7 +65,7 @@
 	//echo sizeof($tabEquipes);
 	$tasMax = new TasMax(sizeof($tabEquipes));
 	$tasMax->insererAuxFeuilles($tabEquipes);
-	$tasMax->afficher();
+
 
 	$tasMax->Update($id);
 
@@ -81,8 +81,6 @@
 	}
 	$deb = $z;
 	$fin = $z / 2;
-	echo $fin ;
-	echo sizeof($tabMatchs);
 
 	if(isset($_POST['setScore']))
 	{
@@ -108,11 +106,6 @@
 		}
 		unset($_POST);
 	}
-	
-	//echo $tabEquipesTournoi[1]->getIdEquipe();
-	//echo sizeof($tabMatchs);
-	//echo sizeof($tas);
-	//echo $tabMatchs[10]->getIdMatchT();
 
 	if($estAdministrateur || $estGestionnaire)
 	{
@@ -122,16 +115,31 @@
 				trigger_error("Il y a un problème avec le tas max.");
 			else
 			{
-				/*while($surplus>0)
-				{
-					//insertEquipeMatchT();
-				}*/
 
 				$tasMax->prochainTour($id);
 				header('Refresh:0; url=StatutTournoiEnCours.php');
 			}
 		}
 	}
+
+	if(isset($_POST['setScoreRandom'])){
+        $tasMax->Update($id);
+        $TabMatchRandom = $tasMax->getTabMatchs();
+        $t = sizeof($TabMatchRandom)-1;
+        while(($t != 0) && ($TabMatchRandom[(($t / 2) - 1)] != null))
+        {
+            $t = $t - 2;
+        }
+        $debb = $t;
+        $finn = $t / 2;
+        for($i=$debb;$i>=$finn;$i--){
+            $randomN = rand(0,10);
+            $tasMax->setScoreTabMatchs($randomN,$i);
+        }
+        if($tasMax->tourPassable())
+            $tasMax->prochainTour($id);
+        header('Refresh:0; url=StatutTournoiEnCours.php');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -198,10 +206,12 @@
 			<tr>
 			<td colspan=2><button type"submit" id="btn1" name="setScore" value="">Saisir score</button></td>
 			</tr>
+			<tr>
+            <td colspan=2><button type"submit" id="btn2" name="setScoreRandom" value="">Saisir score random</button></td>
+            </tr>
 			</table>
 			</div>
 			</form>';
-
 			echo'<form action="AffichageTournoi.php" method="post">
 			<button type"submit" id="btn1" name="VoirArbre" value="">Arbre Tournoi</button>
 			</form>
@@ -210,11 +220,7 @@
 			echo'<form action="Tournois.php" method="post">
 			<button type"submit" id="btn1" name="" value="">Liste Tournois</button>
 			</form>';
-			
-			echo "<br />";
-			echo "<br />";
-			echo "<br />";
-			
+					
 			if($tasMax->tourPassable())
 			{
 				echo'<form action="StatutTournoiEnCours.php" method="post">

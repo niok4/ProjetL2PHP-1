@@ -160,7 +160,8 @@
 	
 	<div id="mapid"></div>
 		<?php
-			$propIns = "<p>
+			$propIns = "
+			<p>
 				- Pas de compte ? Inscrivez-vous dès maintenant -
 			</p>";
 				

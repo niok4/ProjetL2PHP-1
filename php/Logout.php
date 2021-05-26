@@ -76,9 +76,6 @@
 			<button type="submit" class="loginbtn" name="envoiValeurs" value="Envoyer">Oui</button>
 			<button type="submit" class="loginbtn" name="retour" value="Envoyer">Non</button>
 		</form>
-		
-		<div class="container-logout">
-			<p>Pas encore de compte ? <a href="Register.php">Créer un compte</a>.</p>
-		</div>
+
 	</body>
 </html>

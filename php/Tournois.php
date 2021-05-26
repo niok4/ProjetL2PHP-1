@@ -92,11 +92,14 @@
 				</tr>';
 				for($i=0;$i<sizeof($tabTournois);++$i)
 				{
+					$ville = explode("(",$tabTournois[$i]->getLieu())[0];
+
+
 					echo'<tr>';
 					if($tabTournois[$i]->termine())
 					{
 						echo '<td><button type=submit name="tournoiPasse" value="'.$tabTournois[$i]->getIdTournoi().'" class="btn">'.$tabTournois[$i]->getNom().'</button></td>';
-						echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
+						echo '<td>'.$ville.'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>';
 						echo '<td>'.$tabTournois[$i]->getDuree().' jours</td>';
@@ -128,8 +131,9 @@
 					echo'<tr>';
 					if($tabTournois[$i]->enCours())
 					{
+						$ville = explode("(",$tabTournois[$i]->getLieu())[0];
 						echo '<td><button type=submit name="tournoiEnCours" value="'.$tabTournois[$i]->getIdTournoi().'" class="btn">'.$tabTournois[$i]->getNom().'</button></td>';
-						echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
+						echo '<td>'.$ville.'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>';
 						echo '<td>'.$tabTournois[$i]->getDuree().' jours</td>';
@@ -162,6 +166,7 @@
 					echo'<tr>';
 					if($tabTournois[$i]->aVenir())
 					{
+						$ville = explode("(",$tabTournois[$i]->getLieu())[0];
 						$k=0;
 						$nbe = $tabTournois[$i]->getNombreTotalEquipes();
 						$id = $tabTournois[$i]->getIdTournoi();
@@ -174,7 +179,7 @@
 						}
 						$nbPlaces = $tabTournois[$i]->getNombreTotalEquipes();
 						echo '<td><button type=submit name="tournoi" value="'.$tabTournois[$i]->getIdTournoi().'" class="btn">'.$tabTournois[$i]->getNom().'</button></td>';
-						echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
+						echo '<td>'.$ville.'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>';
 						echo '<td>'.$tabTournois[$i]->getDuree().' jours</td>';

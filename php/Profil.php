@@ -18,14 +18,34 @@
 		header('Location: Login.php');
 		exit();
 	}
+
+
 	
 	$ut = getUtilisateurWithEmail($_SESSION['login']);
+	$id = $ut->getIdUtilisateur();
+
 	$estAdministrateur = ($ut->getRole() === "Administrateur");
 	$estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
 	$estJoueur = estJoueur($ut->getIdUtilisateur());
-	if(!$estAdministrateur && !$estGestionnaire && !$estJoueur)
+	$estUtilisateur = false ;
+
+	$tabTournoisAdmin = array();
+	$tabTournois = array();
+	$gest = 0 ;
+
+	if($estAdministrateur)
+		$tabTournoisAdmin = getAllTournoi();
+	elseif($estGestionnaire)
+	{
+		$gest = getGestionnaire($id);
+		$tabTournois = getAllTournoiWithIdGestionnaireByDate($gest->getIdGestionnaire());
+	}
+	elseif(!$estJoueur) {
 		$estUtilisateur = true ;
-	$id = $ut->getIdUtilisateur();
+	}
+
+		
+	
 
 	if(isset($_POST['envoiValeurs']) && strval($_POST['idT'])!=null)
 	{   
@@ -103,63 +123,26 @@
 			?>
 		</div>
 
-
-
 			<?php
-			
-				if($estAdministrateur)
-				{
-					$tabTournois = getAllTournoiByDate();
-					echo '<div id="tab">
-					<table style="border:2px solid black; margin-top:100px">
-						<tr>
-							</th></tr>
-							<th>ID</th>
-							<th>Nom</th>
-							<th>Lieu</th>
-							<th>Début</th>
-							<th>Fin</th>
-							<th>Durée</th>
-							<th>Equipes</th>
-							<th>Gestionnaire</th>
-							<th>Statut</th>
-						</tr>';
 
-					for($i=0;$i<sizeof($tabTournois);++$i)
-					{
-						$idG = $tabTournois[$i]->getIdGestionnaire();
-						$gest = getGestionnaire($idG) ;
-						echo'
-						<tr>
-						<td>'.$tabTournois[$i]->getIdTournoi().'</td>	
-						<td>'.$tabTournois[$i]->getNom().'</td>
-						<td>'.$tabTournois[$i]->getLieu().'</td>
-						<td>'.date("d/m/Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>
-						<td>'.date("d/m/Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>
-						<td>'.$tabTournois[$i]->getDuree().' jours</td>
-						<td>'.$tabTournois[$i]->getNombreTotalEquipes().'</td>
-						<td>'.$gest->getNom().' '.$gest->getPrenom().' (ID '.$idG.')</td>';
-						if($tabTournois[$i]->termine())
-							echo '<td>Terminé</td>';
-						elseif($tabTournois[$i]->enCours())
-							echo '<td>En Cours</td>';
-						else
-							echo '<td>A venir</td>';
-						echo'</tr>';
-					}
-					echo'</table>';
-				}
-				if($estGestionnaire)
+				if($estGestionnaire || $estAdministrateur)
 				{
-					$gest = getGestionnaire($id);
-					$tabTournois = getAllTournoiWithIdGestionnaireByDate($gest->getIdGestionnaire());
+					$monTab = array() ;
+					if($estAdministrateur)
+						$monTab = $tabTournoisAdmin ;
+					else
+						$monTab = $tabTournois ;
+					
 						
-					if(sizeof($tabTournois)>0)
+					if(sizeof($monTab)>0)
 					{
 						echo '<div id="tab2">';
 						echo '<table>
 						<tr>
-						</th></tr>
+						</th></tr>';
+						if($estAdministrateur)
+							echo'<th>Gestionnaire</th>';
+						echo'
 						<th>ID</th>
 						<th>Nom</th>
 						<th>Lieu</th>
@@ -170,24 +153,28 @@
 						<th>Statut</th>
 						</tr>';
 						
-						for($i=0;$i<sizeof($tabTournois);++$i)
+						for($i=0;$i<sizeof($monTab);++$i)
 						{
-							$idG = $tabTournois[$i]->getIdGestionnaire();
+							$idG = $monTab[$i]->getIdGestionnaire();
 							$gest = getGestionnaire($idG) ;
+							$ville = explode("(",$monTab[$i]->getLieu())[0];
 							echo'<tr>';
 							?>
 							<?php
 								echo '
-								<td>'.$tabTournois[$i]->getIdTournoi().'</td>
-								<td>'.$tabTournois[$i]->getNom().'</td>
-								<td>'.$tabTournois[$i]->getLieu().'</td>
-								<td>'.date("d/m/Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>
-								<td>'.date("d/m/Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>
-								<td>'.$tabTournois[$i]->getDuree().' jours</td>
-								<td>'.$tabTournois[$i]->getNombreTotalEquipes().'</td>';
-								if($tabTournois[$i]->termine())
+								<td>'.$monTab[$i]->getIdTournoi().'</td>';
+								if($estAdministrateur)
+									echo '<td>'.$gest->getNom().' '.$gest->getPrenom().' (ID '.$idG.')</td>';
+								echo'<td>'.$monTab[$i]->getNom().'</td>
+
+								<td>'.$ville.'</td>
+								<td>'.date("d/m/Y", strtotime($monTab[$i]->getDateDeb())).'</td>
+								<td>'.date("d/m/Y", strtotime($monTab[$i]->getDateDeb(). '+'.$monTab[$i]->getDuree().' days')).'</td>
+								<td>'.$monTab[$i]->getDuree().' jours</td>
+								<td>'.$monTab[$i]->getNombreTotalEquipes().'</td>';
+								if($monTab[$i]->termine())
 									echo '<td>Terminé</td>';
-								elseif($tabTournois[$i]->enCours())
+								elseif($monTab[$i]->enCours())
 									echo '<td>En Cours</td>';
 								else
 									echo '<td>A venir</td>';

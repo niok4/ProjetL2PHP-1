@@ -1,7 +1,7 @@
 * {box-sizing: border-box}
 
 body {
-  background-image:url(../img/blur3.jpg);
+  background-image:url(../img/blur2.jpg);
   background-size:cover;
   background-attachment:fixed;
   margin:0%;
@@ -75,8 +75,8 @@ button:hover {
 #btn1, #btn2 {
   border:1px solid white;
   width:100%;
-  margin:auto;
 }
+
 
 .bouton {
   position:relative;
