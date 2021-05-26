@@ -43,8 +43,8 @@ h3 {
 	margin-top:5%;
 	margin-bottom:2%;
 	position:relative;
-	width:50%;
-	height:;
+	width:60%;
+  height:100%; 
   background-color:white;
   font-size:20px;
 }
@@ -94,7 +94,6 @@ hr{
 }
 
 #tab table{
-	height:;
  	width:100%;
 }
 
@@ -102,7 +101,7 @@ hr{
 
   	border-collapse: collapse;
   	border:2px solid white ; 
- 	font-family: tournois;
+ 	  font-family: tournois;
   	font-size:20px;
   	color:white;
   	text-align:center;

@@ -91,22 +91,27 @@
 				$equipe = getEquipe($joueur->getIdJoueur()) ;
 				echo  '<tr><th style="text-align:center>('.$equipe->getNomEquipe().')</th></tr>';
 				if($joueur->getCapitaine())
-					echo  '<tr><th style="text-align:center>Role</th><th>Capitaine</th></tr>';
+					echo  '<tr><th style="text-align:center>Role</th><th>Capitaine ('.$equipe->getNomEquipe().')</th></tr>';
+				else
+					echo  '<tr><th style="text-align:center>Equipe</th><th>'.$equipe->getNomEquipe().'</th></tr>';
 			}
 			else
 			{
-				
 				echo'<tr><th style="text-align:center>Role</th><th>'.$ut->getRole().'</th></tr>';
 			}
 			echo'</table>';
-			echo'</div>';
+			?>
+		</div>
 
-		
+
+
+			<?php
+			
 				if($estAdministrateur)
 				{
 					$tabTournois = getAllTournoiByDate();
 					echo '<div id="tab">
-					<table>
+					<table style="border:2px solid black; margin-top:100px">
 						<tr>
 							</th></tr>
 							<th>ID</th>

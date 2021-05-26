@@ -1,5 +1,6 @@
 <?php
-	//include_once('./BDD/reqUtilisateur.php');
+	include_once('./BDD/reqUtilisateur.php');
+	include_once('./BDD/reqJoueur.php');
 	include_once('./BDD/reqTournoi.php');
 	
 	session_start();
@@ -7,6 +8,7 @@
 	$ut = NULL;
 	$estConnecte = false;
 	$estAdministrateur = false;
+	$estJoueur = false ;
 	
 	if(isset($_SESSION['login']))
 	{
@@ -15,6 +17,7 @@
 			$ut = getUtilisateurWithEmail($_SESSION['login']);
 			$estConnecte = true;
 			$estAdministrateur = ($ut->getRole() === "Administrateur");
+			$estJoueur = estJoueur($ut->getIdUtilisateur());
 		}
 	}
 	
@@ -75,9 +78,24 @@
 					<ul class="listeItemsMenus">
 
 						<li class="itemMenu"><a class="lien" href="php/Tournois.php">Liste des Tournois</a></li>
-						<li class="itemMenu"><a class="lien" href="php/CreerTournoi.php">Création de tournois</a></li>
+						<?php
+						if($estAdministrateur)
+						{
+							echo'
+							<li class="itemMenu"><a class="lien" href="php/CreerTournoi.php">Création de tournois</a></li>
+							<li class="itemMenu"><a class="lien" href="php/CreerEquipe.php">Créer Equipe</a></li>
+							<li class="itemMenu"><a class="lien" href="php/CreerGestionnaire.php">Créer gestionnaire</a></li>
+							';
+						}
+
+						if($estJoueur)
+						{
+							echo'<li class="itemMenu"><a class="lien" href="php/Preinscription.php">Préinscription</a></li>';
+						}
+						?>
 						<li class="itemMenu"><a class="lien" href="#">À Propos</a></li>
 						<li class="itemMenu"><a class="lien" href="#">Contact</a></li>
+						
 					</ul>
 				</div>
 			</div>

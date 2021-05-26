@@ -33,9 +33,6 @@
 		$connexion->close();
 		
 		unset($_POST);
-		
-		//header('Location: ../php/resPreInscription.php');
-		exit();
 
 		return true;
 	}

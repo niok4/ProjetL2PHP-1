@@ -61,14 +61,17 @@
 		}
 		
 		$objTemp = $res->fetch_object();
-		$idJoueur = strval($objTemp->idJoueur);
-		
-		$connexion->close();
-		
-		if(empty($idJoueur))
+		if(empty($objTemp))
+		{
+			$connexion->close();
 			return false;
-		
-		return true;
+		}
+		else
+		{
+			$idJoueur = strval($objTemp->idJoueur);
+			$connexion->close();
+			return true;
+		}
 	}
 	
 	function getJoueur(string $id)
