@@ -3,6 +3,7 @@
 	ini_set('display_startup_errors',1);
 	error_reporting(E_ALL);
 
+	include_once('../module/FctGenerales.php');
 	include_once('../BDD/reqGestionnaire.php');
 	include_once('../BDD/reqJoueur.php');
 	include_once('../BDD/reqEquipeTournoi.php');
@@ -50,34 +51,19 @@ $id = $ut->getIdUtilisateur();
 	$nbEquipesTotal = $tournoi->getNombreTotalEquipes() ;
 	
 	$tabMatchs = getAllMatchT($tournoi->getIdTournoi()) ;
-	if(!$tabMatchs)//car l'insertion est trop lente.
+	if(!$tabMatchs)
 		$tabMatchs = getAllMatchT($tournoi->getIdTournoi()) ;
 	$tabEquipesDejaChoisies = getAllEquipesWithMatchT($id);
 	$tabEquipesPasChoisies = getAllEquipesNoMatchT($id);
 	
 	if(isset($_POST['melanger']) && sizeof($tabEquipesPasChoisies)!=0)
 	{
-		/*
-		$tabRandom = melangerEquipes($tabEquipesPasChoisies);
-		$size = sizeof($tabRandom)-1 ;
-
-		$i = 0 ;
-		while(estEquipeMatchT($tabMatchs[$i]->getIdMatchT()))
-		{
-			echo $tabMatchs[$i]->getIdMatchT() ;
-			echo $i;
-			++$i;
-		}
-		insertEquipeMatchT($tabMatchs[$i]->getIdMatchT(),$tabRandom[0],$tabRandom[$size]);
-		unset($_POST);
-		*/
 		$tabMelange = melanger($id);
 		for($i=0;$i<$nbEquipesTotal/2;++$i)
 		{
 			insertEquipeMatchT($tabMatchs[$i]->getIdMatchT(),$tabMelange[2*$i],$tabMelange[2*$i+1]);
 		}
-		
-
+		header('Refresh:0; url=SaisieMatchs.php');		
 	}
 
 ?>
@@ -87,6 +73,17 @@ $id = $ut->getIdUtilisateur();
 <head>
 	<link rel="stylesheet" type="text/css" href="../css/styleStatut.css" />
 	<title> Saisie Matchs </title>
+	<style>
+		select {
+			background-color:#333333;
+			color:white;
+			font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
+			width:70%;
+			height:25px;
+			text-align: center;
+			font-size:18px;
+		}
+	</style>
 </head>
 <body>
 	<div class="bandeau-haut">
@@ -100,9 +97,13 @@ $id = $ut->getIdUtilisateur();
 	<div class="container-main2">
 		<h1 style="font-size:35px"></h1>
 		<?php
-		echo '<div id="tab1">
-		<form action="SaisieMatchs.php" method="post">
+		echo '<div id="tab1">';
+		if(!estPuissanceDe2($id))
+			echo'<p style="color:red">ATTENTION ! Les / L\' équipe(s) que vous ne choissirez pas pour le premier tour rentreront au deuxième tour.</p>';
+		echo'<form action="SaisieMatchs.php" method="post">
 		<table>
+		<tr><th colspan=5>MATCHTS PREMIER TOUR</th></tr>
+
 		<tr>
 		<th rowspan="1"></th>
 		<th>Equipe A</th>
@@ -130,15 +131,14 @@ $id = $ut->getIdUtilisateur();
 
 		if($indexMatch>1)
 			$z = $indexMatch - 1 ;
-		//echo $z ;
 
 		if($z<sizeof($tabMatchs)-1)
 		{
 			$matchTemp = $tabMatchs[$z] ;
-			echo'<tr><td style="font-weight: bold">Match n°'.($indexMatch).'</td>';
+			
 			if(sizeof($tabEquipesDejaChoisies)<$nbEquipesTotal)
 			{	
-				echo '
+				echo '<tr><td style="font-weight: bold">Match n°'.($indexMatch).'</td>
 				<td>
 				<select id="Equipe" name="Equipe1">
 				<option value="none">Choisir équipe</option>';
@@ -156,18 +156,14 @@ $id = $ut->getIdUtilisateur();
 				</td>
 				<td>'.date("d/m/Y",strtotime($matchTemp->getDate())).' '.$matchTemp->getHoraire().'</td>';
 				echo'<td><button type=submit name="valider" value="valider" style="padding:5px">Valider</button>
-				</td>';
+				</td></tr>';
 			}
-			else
-			{
-				echo'<td>A venir</td> <td>A venir</td> <td>'.date("d/m/Y",strtotime($matchTemp->getDate())).' '.$matchTemp->getHoraire().'</td> <td>A venir</td></tr>';
-			}
-
-				++$indexMatch;
+		
+			++$indexMatch;
 		}
 		++$z ;
 
-		for($i=$z;$i<$nbEquipesTotal-1;++$i)
+		/*for($i=$z;$i<$nbEquipesTotal-1;++$i)
 		{
 			$matchTemp = $tabMatchs[$i] ;
 			if($i>=$nbEquipesTotal/2)
@@ -175,7 +171,7 @@ $id = $ut->getIdUtilisateur();
 			else
 				echo'<tr><td style="font-weight: bold">Match n°'.$indexMatch.'</td><td> - </td><td> - </td><td>'.date("d/m/Y",strtotime($matchTemp->getDate())).' '.$matchTemp->getHoraire().'</td></tr>';
 			++$indexMatch;
-		}	
+		}*/
 
 		echo '</table>
 		</form>
@@ -198,6 +194,7 @@ $id = $ut->getIdUtilisateur();
 				{
 					insertEquipeMatchT($tabMatchs[$i]->getIdMatchT(),$_POST["Equipe1"],$_POST["Equipe2"]);
 					unset($_POST);
+					header('Refresh:0; url=SaisieMatchs.php');
 				}		
 			}
 		}

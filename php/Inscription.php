@@ -20,20 +20,13 @@
 	if(!estGestionnaire($ut->getIdUtilisateur()))
 	{
 		trigger_error("Vous n'êtes pas un gestionnaire de tournoi.");
-		/*header('Location: index.php');
-		exit();*/
 	}
 	
 	$gestionnaire = getGestionnaire($ut->getIdUtilisateur());
-	$br = "<br />";
-	/*echo $gestionnaire->toString();
-	echo $br;*/
 	
 	if(!isset($_SESSION["idTournoi"]))
 	{
 		trigger_error("ERREUR : Vous n'avez choisi aucun tournoi !");
-		/*header('Location: index.php');
-		exit();*/
 	}
 	
 	$idTournoi = ((int)strval($_SESSION["idTournoi"]));
@@ -46,7 +39,6 @@
 	}
 	
 	$tournoi = getTournoi($idTournoi);
-	//echo $tournoi->toString();
 	
 	if($tournoi->getIdGestionnaire() !== $gestionnaire->getIdGestionnaire())
 	{
@@ -89,9 +81,6 @@
 		$equipeEstInscrite = $tabEquipeTournoi[$i]->getEstInscrite();
 		$insValTxt = (($equipeEstInscrite) ? "Oui" : "Non");
 		
-		/*echo $nomEquipe;
-		echo $br;
-		echo $idEquipe;*/
 		
 		$corpsTableau = $corpsTableau
 						."<tr>

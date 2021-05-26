@@ -34,8 +34,10 @@
 		
 		unset($_POST);
 		
-		header('Location: ../php/resPreInscription.php');
+		//header('Location: ../php/resPreInscription.php');
 		exit();
+
+		return true;
 	}
 	
 	function modifierEquipeTournoi(int $idE, int $idT, bool $estInscrite)
@@ -286,6 +288,42 @@
 		else
 			return null;
 	}
-	
 
+	function insertNull(int $idT, int $nbEquipes)
+	{
+		include('DataBaseLogin.inc.php');
+			
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+
+		$requete1 = "INSERT INTO EquipeTournoi(`idEquipe`, `idTournoi`, `estInscrite`) VALUES(1, $idT, 1);";
+		$requete2 = "INSERT INTO EquipeTournoi(`idEquipe`, `idTournoi`, `estInscrite`) VALUES(2, $idT, 1);";
+		
+		if($nbEquipes==1)
+		{
+			$res1 = $connexion->query($requete1);
+			if(!$res1)
+				die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+		}
+
+		if($nbEquipes>1)
+		{
+			$res1 = $connexion->query($requete1);
+			if(!$res1)
+				die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+
+			$res2 = $connexion->query($requete2);
+			if(!$res2)
+				die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+		}
+
+		$connexion->close();
+
+		//return true;
+		
+	}
 ?>

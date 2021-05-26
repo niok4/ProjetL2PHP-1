@@ -10,59 +10,73 @@
 		$estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
 	}
 
-	if($estGestionnaire || $estAdministrateur )
+	if($estGestionnaire || $estAdministrateur)
 	{
-		if($_POST && strval($_POST['tournoi'])!=null)
+		if(isset($_POST['tournoi']))
 		{
 			$_SESSION['tournoi'] = strval($_POST['tournoi']) ;
 			header('Location: StatutTournoisAVenir.php');
-		}			
+		}
+
+		if(isset($_POST['tournoiEnCours']))
+		{
+			$_SESSION['tournoiEnCours'] = strval($_POST['tournoiEnCours']) ;
+			header('Location: StatutTournoiEnCours.php');
+		}
+
+		if(isset($_POST['tournoiPasse']))
+		{
+			$_SESSION['tournoiPasse'] = strval($_POST['tournoiPasse']);
+			header('Location: statutTournoiPasses.php');
+		}
 	}
-
-	$_POST = array();
-		
+	else
+	{
+		if($_POST && strval($_POST['tournoiEnCours'])!=null)
+		{
+			$_SESSION['tournoiEnCours'] = strval($_POST['tournoiEnCours']);
+			header('Location: AffichageTournoi.php');
+		}
 	
-?>
+		if($_POST && strval($_POST['tournoiPasse'])!=null)
+		{
+			$_SESSION['tournoiPasse'] = strval($_POST['tournoiPasse']);
+			header('Location: statutTournoiPasses.php');
+		}
+	}
+	
+	$_POST = array();
 
+?>
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
 		<link rel="stylesheet" type="text/css" href=".././css/styleTournois.css" />
 		<title> Liste des Tournois </title>
-	</head>
-	<body>
-		<div>
-			<a href="../index.php">
-				<img src="../img/home.png">
-			</a>
-		</div>
 		<style>
-			body div img {
-				width:50px;
-				border:5px groove white;
-				padding:5px;
+			body .bandeau-haut img {
+				width:70px;
+				padding:5px 0 0 5px;
+				margin:5px 0 0 5px;
+				float:left;
 			}
 		</style>
-		
+	</head>
+
+	<body>
+		<div class="bandeau-haut">
+			<a href="../index.php">
+				<img src="../img/prev.png">
+				<h3>RETOUR</h3>
+			</a>
+		</div>
+
 		<div class="cadre">   
 			<h1>
 				<p style="text-align: center;">Tournois passés</p>
 			</h1>
 			<?php
-				/*
-				Sur la page Html
-				Rajouter un lien cliquable vers le tournoi relantant des informations.
-				Rajouter le vainqueur pour les tournois passés ?
-				Rajouter Lien vers description de équipes du tournoi, puis composition de chaque équipe ?
-				Rajouter lien vers l'arbre associé des tournois en cours et terminés
-				Creer une page avec un menu déroulant ?
-				Dans un premier temps on pourra soit cliquer sur les tournois en cours passés et à venir.
-				Puis un tableau déroulant avec les bons tournois va s'afficher.
-				Ou alors créer une barre de recherche qui va rechercher les tournois par nom/date/nbEquipes ?
-				Attention si le gestionnaire est supprimé les tournois associés le sont aussi.
-				Une fois un tournoi terminé créer une gestionnaire reservoir ?
-				*/
-				echo '<form action="StatutTournoiPassés.php" method="get">
+				echo '<form action="Tournois.php" method="post">
 				<table>
 				<tr>
 				<th>Nom</th>
@@ -77,7 +91,7 @@
 					echo'<tr>';
 					if($tabTournois[$i]->termine())
 					{
-						echo '<td><button type=submit name="tournoi" value="'.$tabTournois[$i]->getIdTournoi().'" class="btn">'.$tabTournois[$i]->getNom().'</button></td>';
+						echo '<td><button type=submit name="tournoiPasse" value="'.$tabTournois[$i]->getIdTournoi().'" class="btn">'.$tabTournois[$i]->getNom().'</button></td>';
 						echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>';
@@ -95,7 +109,7 @@
 				<p style="text-align: center;">Tournois en cours</p>
 			</h1>
 			<?php
-				echo '<form action="StatutTournoiEnCours.php" method="POST">
+				echo '<form action="Tournois.php" method="post">
 				<table>
 				<tr>
 				<th>Nom</th>
@@ -110,7 +124,7 @@
 					echo'<tr>';
 					if($tabTournois[$i]->enCours())
 					{
-						echo '<td><button type=submit name="tournoi" value="'.$tabTournois[$i]->getIdTournoi().'" class="btn">'.$tabTournois[$i]->getNom().'</button></td>';
+						echo '<td><button type=submit name="tournoiEnCours" value="'.$tabTournois[$i]->getIdTournoi().'" class="btn">'.$tabTournois[$i]->getNom().'</button></td>';
 						echo '<td>'.$tabTournois[$i]->getLieu().'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb())).'</td>';
 						echo '<td>'.date("jS F, Y", strtotime($tabTournois[$i]->getDateDeb(). '+'.$tabTournois[$i]->getDuree().' days')).'</td>';

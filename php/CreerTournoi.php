@@ -41,7 +41,7 @@
 	
 	$champChoixGestionnaire = "<div>
 	<select id=\"Gestionnaire\" name=\"Gestionnaire\">
-		<option value=\"\">---Affectation de gestionnaire---</option>";
+		<option value=\"\">Choisir un gestionnaire</option>";
 	
 	for($i=0;$i<count($tabGestionnaires);++$i)
 	{
@@ -70,7 +70,6 @@
 	
 	$_POST = array();
 	
-	//Après 7 ou 8 tournois crées il y a des erreurs dans la requête si on souhaite créer un autre tournoi
 ?>
 
 <!DOCTYPE html>
@@ -87,19 +86,47 @@
 				background-color: #0d0d0d;
 				color: white;
 				padding: 16px 20px;
-				margin: 8px 0;
+				margin: 15px 0;
 				border: none;
 				cursor: pointer;
 				width: 100%;
 				opacity: 0.9;
 				border-radius:5px;
 			}
+
+			#Gestionnaire {
+				background-color:white;
+				color:#333333;
+				font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
+				width:40%;
+				height:40px;
+				text-align: center;
+				font-size:18px;
+				border-radius:5px;
+			}
+			body .bandeau-haut img {
+				width:70px;
+				padding:5px 0 0 5px;
+				margin:5px 0 0 5px;
+				float:left;
+			}
+
+			#bis {
+				font-family:tournois;
+				font-size:25px;
+				padding:15px 0 0 0;
+				float:left;
+				margin:10px 0 0 20px;
+				color:black;
+			}
+
 		</style>
 	</head>
 	<body>
-		<div>
+		<div class="bandeau-haut">
 			<a href="../index.php">
-				<img src="../img/home.png">
+				<img src="../img/prev.png">
+				<h3 id="bis">RETOUR</h3>
 			</a>
 		</div>
 		
@@ -122,13 +149,22 @@
 					
 					<label for="dateDeb"><b>Date de début</b></label>
 					<input type="date" name="dateDeb" id="dateDeb" required/><br />
+					<hr>
+
+					
+					<select id="Gestionnaire" name="type">
+						<option value="">Choisir un type de Tournois</option>
+						<option value="Championnat">Championnat</option>
+						<option value="Coupe">Coupe</option>
+						<option value="Tournoi">Tournoi</option>
+					</select>
+					</br>
 
 					<?php
 					echo $champChoixGestionnaire;
 					?>
 					
-					<label for="descriptif">Description</label>
-					<input type="text" name="descriptif" id="descriptif" placeholder="Bref descriptif du tournoi"/><br />
+					<!--<input type="text" name="descriptif" id="descriptif" placeholder="Bref descriptif du tournoi"/><br />-->
 					
 					<button type="submit" class="btn"  name="envoiValeurs" value="Envoyer">Créer</button> 
 				</p>

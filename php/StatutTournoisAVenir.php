@@ -22,7 +22,9 @@ if(!isset($_SESSION['login']))
 $ut = getUtilisateurWithEmail($_SESSION['login']);
 $estAdministrateur = ($ut->getRole() === "Administrateur");
 $estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
-$id = $ut->getIdUtilisateur();
+$idU = $ut->getIdUtilisateur();
+$id = $_SESSION['tournoi'] ;
+$tournoi = getTournoi($id);
 
 	if(!$estGestionnaire)
 	{
@@ -35,8 +37,7 @@ $id = $ut->getIdUtilisateur();
 	}
 
 
-	$id = $_SESSION['tournoi'] ;
-	$tournoi = getTournoi($id);
+	
 	$tabEquipesTournoi = getEquipeTournoiWithIdTournoi($tournoi->getIdTournoi());
 	$nbEquipesInscrites = 0 ;
 	$tabEquipes = array();
@@ -64,7 +65,6 @@ $id = $ut->getIdUtilisateur();
 		}
 		++$i;
 	}
-
 ?>
 
 <!DOCTYPE html>
@@ -96,8 +96,11 @@ $id = $ut->getIdUtilisateur();
 				</h2>
 				</th>
 				</tr>';
+	
+		
 				for($i=0;$i<$nbEquipesTotal;++$i)
 				{
+
 					if(sizeof($tabEquipesTournoi)>0 && $tabEquipesTournoi[$i]!=null)
 					{
 						$equipe = getEquipe($tabEquipesTournoi[$i]->getIdEquipe()) ;
@@ -117,16 +120,20 @@ $id = $ut->getIdUtilisateur();
 							<td> - </td>
 							</tr>';
 					}
+			
 				}
 				echo '<tr><th colspan="2">';
 				if($nbEquipesInscrites==$nbEquipesTotal)
+				{
 					echo '<p style="text-align:center">- Inscriptions terminées -</p>';
+				}
 				else
 					echo '<p style="text-align:center">- Inscriptions non terminées -</p>';
-				echo'</th></tr>
-				</table>';
+				echo'</th></tr>';
+				echo'</table>';
 				echo '</div>
 				<div class="bouton">';
+
 				if(sizeof($tabMatchs)!=($nbEquipesTotal-1))
 				{
 					echo'
@@ -139,8 +146,7 @@ $id = $ut->getIdUtilisateur();
 				{
 					echo'<form action="SaisieMatchs.php" method="post">
 					<button type="submit" id="btn2" name="setDate" value="">Saisir / Consulter Matchs</button>
-					</form>
-					';
+					</form>';
 				}
 		?>
 			<form action="Tournois.php" method="post">

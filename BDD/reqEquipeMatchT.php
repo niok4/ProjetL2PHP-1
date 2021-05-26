@@ -81,6 +81,71 @@
 		return true;
 	}
 
+	function getAllEquipeMatchT(int $idTournoi)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "SELECT EquipeMatchT.idMatchT,idEquipe FROM EquipeMatchT,MatchT WHERE EquipeMatchT.idMatchT=MatchT.idMatchT AND idTournoi=$idTournoi";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		
+		$nbEquipesMatchT = $res->num_rows;
+		
+		$connexion->close();
+		
+		$tabEquipesMatchT = array();
+		
+		if($nbEquipesMatchT == 0)
+			return $tabEquipesMatchT;
+		
+		while($obj = $res->fetch_object())
+		{
+			array_push($tabEquipesMatchT, getSingleEquipeMatchT($obj->idEquipe,$obj->idMatchT));
+		}
+		
+		return $tabEquipesMatchT;
+	}
+
+
+
+	function UpdateScore(int $idEquipe, int $idMatchT, int $score)
+	{
+		include('DataBaseLogin.inc.php');
+		
+		$connexion = new mysqli($server, $user, $passwd, $db);
+	
+		if($connexion->connect_error)
+		{
+			echo('Erreur de connexion('.$connexion->connect_errno.') '.$connexion->connect_error);
+		}
+		
+		$requete = "UPDATE EquipeMatchT SET score=$score WHERE idMatchT=$idMatchT AND idEquipe=$idEquipe";
+		
+		$res = $connexion->query($requete);
+		if(!$res)
+		{
+			die('Echec lors de l\'exécution de la requête: ('.$connexion->errno.') '.$connexion->error);
+			$connexion->close();
+			
+			return NULL;
+		}
+		$connexion->close();
+		return true;
+	}
 
 
 	
