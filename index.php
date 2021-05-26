@@ -1,5 +1,6 @@
 <?php
-	include_once('./BDD/reqUtilisateur.php');
+	//include_once('./BDD/reqUtilisateur.php');
+	include_once('./BDD/reqTournoi.php');
 	
 	session_start();
 	
@@ -16,6 +17,9 @@
 			$estAdministrateur = ($ut->getRole() === "Administrateur");
 		}
 	}
+	
+	$tabTournois = getAllTournoi();
+	$possedeTournois = (count($tabTournois) > 0);
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +38,11 @@
 	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 	        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 	        crossorigin="anonymous"></script>
-	    <link rel="stylesheet" href="style.css">
+	    <!--<link rel="stylesheet" href="style.css">!-->
+		
+		<link rel="stylesheet" type="text/css" href="./css/styleCarte.css" />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 	</head>
 	<body>
 		<div class="bandeau-haut">	
@@ -130,6 +138,9 @@
 
     <div class="cadre">
 		<h1>Bienvenue</h1>
+	</div>
+	
+	<div id="mapid"></div>
 		<?php
 			$propIns = "<p>
 				- Pas de compte ? Inscrivez-vous dès maintenant -
@@ -137,8 +148,94 @@
 				
 			if(!$estConnecte)
 				echo $propIns;
+			
+			if($possedeTournois)
+			{
+				
+				$declarationDonneesJSON = "var donnees = [";
+				
+				for($i=0;$i<count($tabTournois);++$i)
+				{
+					$strTemp = strval($tabTournois[$i]->getLieu());
+					$tabTemp = explode("(", $strTemp);
+					
+					$nomVilleTemp = strval($tabTemp[0]);
+					$posTemp = strval($tabTemp[1]);
+					$posTemp2 = strval(explode(")", $posTemp)[0]);
+					$tabPosTemp = explode(";", $posTemp2);
+					
+					$nomVille = strval(explode(" ", $nomVilleTemp)[0]);
+					
+					$posXTemp = strval($tabPosTemp[0]);
+					$posYTemp = strval($tabPosTemp[1]);
+					
+					if(!$posXTemp)
+						trigger_error("ERREUR : Localisation non définie.");
+					
+					if(!$posYTemp)
+						trigger_error("ERREUR : Localisation non définie.");
+					
+					$posX = floatval($posXTemp);
+					$posY = floatval($posYTemp);
+					
+					$nomTournoi = $tabTournois[$i]->getNom();
+					$dateDeb = $tabTournois[$i]->getDateDeb();
+					$duree = $tabTournois[$i]->getDuree();
+					$nbEquipes = $tabTournois[$i]->getNombreTotalEquipes();
+					
+					$declarationDonneesJSON = $declarationDonneesJSON."{ nomVille: '$nomVille', posX: $posX, posY: $posY, nomTournoi : '$nomTournoi', dateDeb: '$dateDeb', duree: '$duree', nbEquipes: $nbEquipes }";
+					
+					if($i < (count($tabTournois) - 1))
+						$declarationDonneesJSON = $declarationDonneesJSON.",";
+				}
+				
+				$declarationDonneesJSON = $declarationDonneesJSON."];";
+				
+				$p1 = "<script>
+				
+				var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+				
+				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+					attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>',
+					maxZoom: 18,
+					id: 'mapbox/streets-v11',
+					tileSize: 512,
+					zoomOffset: -1,
+					accessToken: 'pk.eyJ1Ijoiam9mZnJleXB1amFkZSIsImEiOiJja3A1bWhzbDkwbmtkMnZzMWw3NDMxdDdnIn0.PmGtjPOaJsBREWnhD0QDSw'
+				}).addTo(mymap);";
+				
+				$p1 = $p1.$declarationDonneesJSON;
+				
+				$p2 = "</script>";
+				
+				$carteStr = $p1;
+				
+				$carteStr = $carteStr."
+				var tabPopUp = [];
+				
+				for(var i=0;i<donnees.length;++i)
+				{
+					var tournoiHTML = \"<b>\" + String(donnees[i].nomTournoi) + \"</b> <br />\";
+					
+					tournoiHTML = tournoiHTML + \"Date de début :\" + String(donnees[i].dateDeb) + \"<br />\";
+					tournoiHTML = tournoiHTML + \"Durée :\" + String(donnees[i].duree) + \" jours<br />\";
+					tournoiHTML = tournoiHTML + \"Ville :\" + String(donnees[i].nomVille) + \"<br />\";
+					tournoiHTML = tournoiHTML + \"Nombre d'équipes :\" + String(donnees[i].nbEquipes) + \"<br />\";
+					
+					var popUp = L.marker([donnees[i].posX, donnees[i].posY]).addTo(mymap).bindPopup(tournoiHTML);
+					tabPopUp.push(popUp);
+				}
+				
+				tabPopUp[0].openPopup();
+				";
+				
+				$carteStr = $carteStr.$p2;
+				
+				//echo "<div id=\"mapid\"></div>";
+				
+				echo $carteStr;
+			}
 		?>
-	</div>
 	</div>
 	</body>
 </html>

@@ -1,7 +1,7 @@
 <?php
-	include_once('reqTournoi.php');
-	include_once('reqMatchT.php');
-	include_once('../module/EquipeMatchT.php');
+	include_once(realpath(dirname(__FILE__)).'/../BDD/reqTournoi.php');
+	include_once(realpath(dirname(__FILE__)).'/../BDD/reqMatchT.php');
+	include_once(realpath(dirname(__FILE__)).'/../module/EquipeMatchT.php');
 
 
 	//Idée : regrouper les tables EquipeMatchT et MatchT?

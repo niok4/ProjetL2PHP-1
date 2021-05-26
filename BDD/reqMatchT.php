@@ -1,6 +1,6 @@
 <?php
-	include_once('reqTournoi.php');
-	include_once('../module/MatchT.php');
+	include_once(realpath(dirname(__FILE__)).'/../BDD/reqTournoi.php');
+	include_once(realpath(dirname(__FILE__)).'/../module/MatchT.php');
 
 	function insertMatchT(int $idTournoi,string $date, string $horaire)
     {

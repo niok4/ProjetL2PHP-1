@@ -1,6 +1,6 @@
 <?php
-	include_once('../module/Equipe.php');
-	include_once('../module/EquipeMatchT.php');
+	include_once(realpath(dirname(__FILE__)).'/../module/Equipe.php');
+	include_once(realpath(dirname(__FILE__)).'/../module/EquipeMatchT.php');
 
 	class TasMax
 	{

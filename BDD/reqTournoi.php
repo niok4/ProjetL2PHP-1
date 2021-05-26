@@ -1,6 +1,6 @@
 <?php
 	include_once('reqGestionnaire.php');
-	include_once('../module/Tournoi.php');
+	include_once(realpath(dirname(__FILE__)).'/../module/Tournoi.php');
 	
 	function insertTournoi(string $nom, string $dateDeb, string $duree, int $idGestionnaire, string $lieu, string $nombreTotalEquipes)
 	{
