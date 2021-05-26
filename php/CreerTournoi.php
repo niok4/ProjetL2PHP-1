@@ -135,6 +135,7 @@
 			}
 
 		</style>
+		<script type="text/javascript" src="../js/Date.js"></script>
 	</head>
 	<body>
 		<div class="bandeau-haut">
@@ -162,10 +163,10 @@
 					
 					<label for="nombreTotalEquipes"><b>Nombre d'équipes</b></label>
 					<input type="number" name="nombreTotalEquipes" id="nombreTotalEquipes" required/><br />
-					
+				
 					<label for="dateDeb"><b>Date de début</b></label>
-					<input type="date" name="dateDeb" id="dateDeb" required/><br />
-					<hr>
+					    <input type="date" name="dateDeb" id="dateDeb" onclick="minDate()" required/><br />
+					    <hr>
 					
 					<select id="Gestionnaire" name="type">
 						<option value="">Choisir un type de Tournois</option>
