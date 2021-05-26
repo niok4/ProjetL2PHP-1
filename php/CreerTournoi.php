@@ -34,9 +34,6 @@
 		exit();
 	}
 
-
-
-
 	$tabGestionnaires = getAllGestionnaire();
 	
 	$champChoixGestionnaire = "<div>
@@ -55,17 +52,33 @@
 	$champChoixGestionnaire = $champChoixGestionnaire."</select>
 	</div>";
 
-
-
-
-
-
-	
 	if(isset($_POST) && isset($_POST['envoiValeurs']))
-	{   
+	{
+		$strTemp = strval($_POST['ChoixVille']);
+		$tabTemp = explode("(", $strTemp);
+		
+		$nomVilleTemp = strval($tabTemp[0]);
+		$posTemp = strval($tabTemp[1]);
+		$posTemp2 = strval(explode(")", $posTemp)[0]);
+		$tabPosTemp = explode(";", $posTemp2);
+		
+		$nomVille = strval(explode(" ", $nomVilleTemp)[0]);
+		
+		$posXTemp = strval($tabPosTemp[0]);
+		$posYTemp = strval($tabPosTemp[1]);
+		
+		if(!$posXTemp)
+			trigger_error("ERREUR : Localisation non définie.");
+		
+		if(!$posYTemp)
+			trigger_error("ERREUR : Localisation non définie.");
+		
+		$posX = floatval($posXTemp);
+		$posY = floatval($posYTemp);
+		
 		$nbEquipes = $_POST['nombreTotalEquipes'] ;
 		
-		creerTournoi(strval($_POST['nom']),$_POST['dateDeb'], $_POST['duree'],$_POST['Gestionnaire'], strval($_POST['lieu']),$_POST['nombreTotalEquipes']);
+		creerTournoi(strval($_POST['nom']),$_POST['dateDeb'], $_POST['duree'],$_POST['Gestionnaire'], strval($_POST['ChoixVille']),$_POST['nombreTotalEquipes']);
 	}
 	
 	$_POST = array();
@@ -76,6 +89,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/syleIndex.css" />
+		<link rel="stylesheet" type="text/css" href="../css/styleCarte.css" />
 		<style>
 			.btn:hover {
 				opacity:1;
@@ -138,8 +152,10 @@
 					<label for="nom"><b>Nom</b></label>
 					<input type="text" name="nom" id="nom" placeholder="(max 30 caractères)" required /><br />
 					
-					<label for="lieu"><b>Lieu</b></label>
-					<input type="text" name="lieu" id="lieu" placeholder="(max 30 caractères)" required/><br />
+					<label for="ChoixVille">Choix de la ville</label>
+					<div id="auto">
+						<input type="text" placeholder="Veuillez saisir votre ville" name="ChoixVille" id="ChoixVille" required>
+					</div>
 					
 					<label for="duree"><b>Durée</b></label>
 					<input type="number" name="duree" id="duree" required/><br />
@@ -150,7 +166,6 @@
 					<label for="dateDeb"><b>Date de début</b></label>
 					<input type="date" name="dateDeb" id="dateDeb" required/><br />
 					<hr>
-
 					
 					<select id="Gestionnaire" name="type">
 						<option value="">Choisir un type de Tournois</option>
@@ -170,5 +185,7 @@
 				</p>
 			</form>
 		</div>
+		
+		<script type="text/javascript" src="../js/saisieVille.js"></script>
 	</body>
 </html>

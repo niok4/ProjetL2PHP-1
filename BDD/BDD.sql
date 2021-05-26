@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS Tournoi
 	dateDeb DATE NOT NULL,
 	duree INTEGER NOT NULL,
 	idGestionnaire INTEGER NOT NULL,
-	lieu VARCHAR(25) NOT NULL,
+	lieu TEXT NOT NULL,
 	nombreTotalEquipes INTEGER NOT NULL,
 	CONSTRAINT FK_Tournoi_Gestionnaire FOREIGN KEY (idGestionnaire) REFERENCES Gestionnaire(idGestionnaire) ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Type
 (
 	idType INTEGER NOT NULL PRIMARY KEY,
 	idTournoi INTEGER NOT NULL,
-	typeTournoi ENUM('Concours', 'Compétition'),
+	typeTournoi ENUM('Coupe','Championnat','Tournoi') DEFAULT NULL,
 	CONSTRAINT FK_Type_Tournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi) ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
@@ -88,6 +88,27 @@ CREATE TABLE IF NOT EXISTS Preinscription
 	CONSTRAINT PK_Preinscription PRIMARY KEY (idEquipe, idTournoi),
 	CONSTRAINT FK_Preinscription_Equipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT FK_Preinscription_Tournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi) ON UPDATE CASCADE ON DELETE CASCADE
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS Poule
+(
+	idPoule INTEGER NOT NULL PRIMARY KEY,
+	idTournoi INTEGER NOT NULL,
+	nbEquipes INTEGER NOT NULL, -- Très peu pertinent.
+	nomPoule VARCHAR(25) NOT NULL,
+	CONSTRAINT FK_Poule_Tournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi) ON UPDATE CASCADE ON DELETE CASCADE
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS EquipePoule
+(
+	idEquipe INTEGER NOT NULL,
+	idPoule INTEGER NOT NULL,
+	idMatchT INTEGER NOT NULL,
+	score INTEGER NOT NULL,
+	CONSTRAINT PK_EquipePoule PRIMARY KEY(idEquipe, idPoule, idMatchT),
+	CONSTRAINT FK_EquipePoule_Equipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT FK_EquipePoule_Poule FOREIGN KEY (idPoule) REFERENCES Poule(idPoule) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT FK_EquipePoule_MatchT FOREIGN KEY (idMatchT) REFERENCES MatchT(idMatchT) ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
 INSERT INTO Utilisateur VALUES(1, "ADMIN", "Admin", "admin@test.com", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "Administrateur"), -- Mot de passe : admin

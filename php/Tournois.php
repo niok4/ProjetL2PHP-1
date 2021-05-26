@@ -2,6 +2,10 @@
 	include_once('../BDD/reqEquipeTournoi.php');
 	$tabTournois= getAllTournoi();
 	session_start();
+	
+	$ut = null;
+	$estAdministrateur = null;
+	$estGestionnaire = null;
 
 	if(isset($_SESSION['login']))
 	{
@@ -32,13 +36,13 @@
 	}
 	else
 	{
-		if($_POST && strval($_POST['tournoiEnCours'])!=null)
+		if($_POST && isset($_POST['tournoiEnCours']) && strval($_POST['tournoiEnCours'])!=null)
 		{
 			$_SESSION['tournoiEnCours'] = strval($_POST['tournoiEnCours']);
 			header('Location: AffichageTournoi.php');
 		}
 	
-		if($_POST && strval($_POST['tournoiPasse'])!=null)
+		if($_POST && isset($_POST['tournoiPasse']) && strval($_POST['tournoiPasse'])!=null)
 		{
 			$_SESSION['tournoiPasse'] = strval($_POST['tournoiPasse']);
 			header('Location: statutTournoiPasses.php');
