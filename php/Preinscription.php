@@ -18,14 +18,14 @@
 	}
 	
 	$ut = getUtilisateurWithEmail($_SESSION['login']);
-	$estGestionnaire = false ;
-	$estAdministrateur = false ;
-	$estAdministrateur = ($ut->getRole() === "Administrateur");
-	$estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
+	//$estGestionnaire = false ;
+	//$estAdministrateur = false ;
+	//$estAdministrateur = ($ut->getRole() === "Administrateur");
+	//$estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
 	$estJoueur = estJoueur($ut->getIdUtilisateur()) ;
 
 
-	if(!$estJoueur || !($estAdministrateur || $estGestionnaire))
+	if(!$estJoueur)
 	{
 		trigger_error("Vous n'êtes pas un joueur d'équipe.");
 		header('Location: ../index.php');
