@@ -22,14 +22,10 @@
 	$id = $_SESSION['tournoiEnCours'] ;
 	$tournoi = getTournoi($id);
 
-	if(!$estGestionnaire || !($idU == $tournoi->getIdGestionnaire()))
+	if(!($idU == $tournoi->getIdGestionnaire()) || !$estAdministrateur)
 	{
-		if(!$estAdministrateur)
-		{
-			trigger_error("Vous n'avez pas les droits !");
-			header('Location: Tournois.php');
-			exit();
-		}
+		header('Location: AffichageTournoi.php');
+		exit();
 	}
 
 

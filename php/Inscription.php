@@ -156,24 +156,35 @@
 		<link rel="stylesheet" type="text/css" href="../css/styleLogin.css" />
 		<script type="text/javascript" src="../js/InscriptionJS.js"></script>
 		<title>Inscription</title>
+		<style>
+			body .bandeau-haut img {
+				width:70px;
+				padding:5px 0 0 5px;
+				margin:5px 0 0 5px;
+				float:left;
+			}
+
+			.tableauClassique td,.tableauClassique th {
+				width: 15%;
+				text-align:center;
+			}
+
+		</style>
 	</head>
 	
 	<body>
-		<div>
-			<a href="Login.php">Se connecter</a>
-			<a href="Logout.php">Se déconnecter</a>
-			<a href="Register.php">Créer un compte</a>
-			<a href="CreerEquipe.php">Créer une équipe</a>
-			<a href="Preinscription.php">Pré-inscrire une équipe</a>
-			<a href="ChoixInscription.php">Gérer les inscriptions d'un tournoi</a>
+		<div class="bandeau-haut">
+			<a href="Tournois.php">
+				<img src="../img/prev.png">
+				<h3>RETOUR</h3>
+			</a>
 		</div>
+
 		
 		<form action="Inscription.php" method="POST" onreset="return vider();" class="container">
 			<h1>
 				<p style="text-align: center;">Inscription</p>
 			</h1>
-			
-			<p style="text-align: center;">Sélectionnez les équipes à inscrire ou à retirer du tournoi.</p>
 			
 			<hr>
 			
@@ -187,10 +198,11 @@
 			<?php
 				echo $tableau;
 			?>
+			<br/>
 			<hr>
 			
-			<button type="submit" class="registerbtn" name="envoiValeurs" value="Envoyer">Voilà</button>
-			<button type="reset" name="effacerValeurs" value="Effacer">Voilà 2</button>
+			<button type="submit" class="registerbtn" name="envoiValeurs" value="Envoyer">Valider</button>
+			<button type="reset" name="effacerValeurs" value="Effacer">Effacer les champs</button>
 		</form>
 	</body>
 </html>

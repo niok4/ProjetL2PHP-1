@@ -14,11 +14,11 @@
 session_start();
 //$_SESSION['idT'] = $_GET['tournoi'];
 if(!isset($_SESSION['login']))
-	{
-		trigger_error("Vous ne pouvez pas accéder à cette page.");
-		header('Location: Tournois.php');
-		exit();
-	}
+{
+	trigger_error("Vous ne pouvez pas accéder à cette page.");
+	header('Location: Tournois.php');
+	exit();
+}
 $ut = getUtilisateurWithEmail($_SESSION['login']);
 $estAdministrateur = ($ut->getRole() === "Administrateur");
 $estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
@@ -65,6 +65,15 @@ $tournoi = getTournoi($id);
 		}
 		++$i;
 	}
+
+	if(isset($_POST['inscriptions']))
+	{
+		$_SESSION["idTournoi"] = $id ;
+		header('Location: Inscription.php') ;
+		exit();
+
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -123,7 +132,7 @@ $tournoi = getTournoi($id);
 			
 				}
 				echo '<tr><th colspan="2">';
-				if($nbEquipesInscrites==$nbEquipesTotal)
+				if($nbEquipesInscrites==$nbEquipesTotal)//date
 				{
 					echo '<p style="text-align:center">- Inscriptions terminées -</p>';
 				}
@@ -133,6 +142,14 @@ $tournoi = getTournoi($id);
 				echo'</table>';
 				echo '</div>
 				<div class="bouton">';
+
+				if($nbEquipesInscrites!=$nbEquipesTotal)
+				{
+					echo'
+					<form action="StatutTournoisAVenir.php" method="post">
+					<button type"submit" id="btn1" name="inscriptions" value="" style="margin-bottom:1%">Consulter/modifier inscriptions</button>
+					</form>';
+				}
 
 				if(sizeof($tabMatchs)!=($nbEquipesTotal-1))
 				{

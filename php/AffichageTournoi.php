@@ -25,8 +25,9 @@
 		$ut = getUtilisateurWithEmail($_SESSION['login']);
 		$estAdministrateur = ($ut->getRole() === "Administrateur");
 		$estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
+		$idU = $ut->getIdUtilisateur();
 
-		if($estGestionnaire || $estAdministrateur)
+		if(($idU == $tournoi->getIdGestionnaire()) || $estAdministrateur)
 		{
 			$retour = "<form action=\"StatutTournoiEnCours.php\" method=\"post\">
 			<button type=\"submit\" id=\"btn1\" name=\"\" >Retour</button>
