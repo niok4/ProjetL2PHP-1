@@ -159,7 +159,7 @@ INSERT INTO Joueur VALUES
 (11, 4, 1),
 (12, 4, 0),
 (13, 4, 0),
-(14, 12, 1);
+(19, 12, 1);
 
 INSERT INTO Tournoi VALUES
 (1, 'COUPE DU MONDE', '2012-12-12', 50, 2, 'Paris (48.859;2.347)', 8),
