@@ -22,7 +22,7 @@
 	$id = $_SESSION['tournoiEnCours'] ;
 	$tournoi = getTournoi($id);
 
-	if(!($idU == $tournoi->getIdGestionnaire()) || !$estAdministrateur)
+	if(!($idU === $tournoi->getIdGestionnaire()) && !$estAdministrateur)
 	{
 		header('Location: AffichageTournoi.php');
 		exit();
