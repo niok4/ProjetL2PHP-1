@@ -87,6 +87,7 @@
 							<li class="itemMenu"><a class="lien" href="php/CreerTournoi.php">Création de tournois</a></li>
 							<li class="itemMenu"><a class="lien" href="php/CreerEquipe.php">Créer Equipe</a></li>
 							<li class="itemMenu"><a class="lien" href="php/CreerGestionnaire.php">Créer gestionnaire</a></li>
+							<li class="itemMenu"><a class="lien" href="php/ChoixInscription.php">Inscription</a></li>
 							';
 						}
 
