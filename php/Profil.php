@@ -108,7 +108,7 @@
 			elseif($estJoueur)
 			{
 				$joueur = getJoueur($id);
-				$equipe = getEquipe($joueur->getIdJoueur()) ;
+				$equipe = getEquipe($joueur->getIdEquipe()) ;
 				echo  '<tr><th style="text-align:center>('.$equipe->getNomEquipe().')</th></tr>';
 				if($joueur->getCapitaine())
 					echo  '<tr><th style="text-align:center>Role</th><th>Capitaine ('.$equipe->getNomEquipe().')</th></tr>';
