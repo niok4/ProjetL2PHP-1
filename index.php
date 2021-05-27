@@ -9,6 +9,7 @@
 	$estConnecte = false;
 	$estAdministrateur = false;
 	$estJoueur = false ;
+	$estGestionnaire = false ;
 	
 	if(isset($_SESSION['login']))
 	{
@@ -18,6 +19,7 @@
 			$estConnecte = true;
 			$estAdministrateur = ($ut->getRole() === "Administrateur");
 			$estJoueur = estJoueur($ut->getIdUtilisateur());
+			$estGestionnaire = estGestionnaire($ut->getIdUtilisateur());
 		}
 	}
 	
@@ -86,6 +88,11 @@
 							<li class="itemMenu"><a class="lien" href="php/CreerEquipe.php">Créer Equipe</a></li>
 							<li class="itemMenu"><a class="lien" href="php/CreerGestionnaire.php">Créer gestionnaire</a></li>
 							';
+						}
+
+						if($estGestionnaire)
+						{
+							echo'<li class="itemMenu"><a class="lien" href="php/ChoixInscription.php">Inscription</a></li>';
 						}
 
 						if($estJoueur)
